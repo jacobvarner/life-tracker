@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
@@ -14,11 +15,18 @@ const UserSchema = new mongoose.Schema(
       match: [/\S+@\S+\.\S+/, 'is invalid'],
       index: true
     },
-    hash: String,
-    salt: String
+    password: { type: String, required: true }
   },
   { timestamps: true }
 );
+
+UserSchema.methods.generateHash = password => {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+UserSchema.methods.validPassword = password => {
+  return bcrypt.compareSync(password, this.password);
+};
 
 // export the new Schema so we could modify it using Node.js
 module.exports = mongoose.model('User', UserSchema);

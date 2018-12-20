@@ -8,9 +8,9 @@ const API_PORT = 3001;
 const app = express();
 const router = express.Router();
 
-const User = require('./models/user.js');
-const Category = require('./models/category.js');
-const Entry = require('./models/entry.js');
+const User = require('./models/User.js');
+const Category = require('./models/Category.js');
+const Entry = require('./models/Entry.js');
 
 mongoose.connect(
   process.env.DATABASE_URI,
