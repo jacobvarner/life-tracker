@@ -1,0 +1,11 @@
+{
+  "name": "life-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  },
+  "scripts": {
+    "start": "concurrently \"cd backend && node server.js\" \"cd frontend && npm start\""
+  }
+}
