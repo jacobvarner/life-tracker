@@ -8,9 +8,9 @@ const API_PORT = 3001;
 const app = express();
 const router = express.Router();
 
-const User = require('./user.js');
-const Category = require('./category.js');
-const Entry = require('./entry.js');
+const User = require('./models/user.js');
+const Category = require('./models/category.js');
+const Entry = require('./models/entry.js');
 
 mongoose.connect(
   process.env.DATABASE_URI,
@@ -62,7 +62,7 @@ router.post('/new-user', (req, res) => {
 });
 
 router.get('/users', (req, res) => {
-  User.find({}, 'name email _id', (err, users) => {
+  User.find({}, '_id name email', (err, users) => {
     let output = [];
 
     users.map(user => {
