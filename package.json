@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "concurrently": "^4.1.0"
+    "concurrently": "^4.1.0",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7"
   },
   "scripts": {
     "start": "concurrently \"cd backend && node server.js\" \"cd frontend && npm start\""

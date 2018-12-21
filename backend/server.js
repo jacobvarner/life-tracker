@@ -3,14 +3,16 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const path = require('path');
 
-const API_PORT = 3001;
+const port = process.env.PORT;
+
 const app = express();
-const router = express.Router();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-const User = require('./models/User.js');
-const Category = require('./models/Category.js');
-const Entry = require('./models/Entry.js');
+require('./routes')(app);
 
 mongoose.connect(
   process.env.DATABASE_URI,
@@ -22,59 +24,7 @@ let db = mongoose.connection;
 db.once('open', () => console.log('Connected to the database!'));
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// TODO: Add basic CRUD API calls
-// Prepend /api on all API calls
-app.use('/api', router);
-
-router.post('/new-user', (req, res) => {
-  let name = req.body.name;
-  let email = req.body.email;
-  let hash = req.body.hash;
-  let salt = req.body.salt;
-
-  User.findOne({ email: email }, (err, foundUser) => {
-    if (err) return;
-    if (foundUser) {
-      res.send('That email address is already in use.');
-    } else {
-      let newUser = new User({
-        name: name,
-        email: email,
-        hash: hash,
-        salt: salt
-      });
-
-      newUser.save((err, createdUser) => {
-        if (err) return;
-        res.json({
-          name: name,
-          email: email,
-          hash: hash,
-          salt: salt,
-          _id: createdUser._id
-        });
-      });
-    }
-  });
-});
-
-router.get('/users', (req, res) => {
-  User.find({}, '_id name email', (err, users) => {
-    let output = [];
-
-    users.map(user => {
-      output.push(user);
-    });
-
-    res.send(output);
-  });
-});
-
-// append /api for our http requests
-app.use('/api', router);
-
 // launch our backend into a port
-app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
+app.listen(port, () => console.log(`Listening on port ${port}`));
+
+module.exports = app;
