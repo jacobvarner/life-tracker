@@ -6,7 +6,7 @@ const ObjectId = Schema.ObjectId;
 // Users
 const UserSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, default: 'First Last' },
     email: {
       type: String,
       lowercase: true,
