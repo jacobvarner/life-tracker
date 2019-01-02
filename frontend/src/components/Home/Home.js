@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
+import { setInStorage, getFromStorage } from '../../utils/storage';
 
 class Home extends Component {
   constructor(props) {
@@ -18,10 +19,34 @@ class Home extends Component {
 
     this.onTextBoxChange = this.onTextBoxChange.bind(this);
     this.onSignUp = this.onSignUp.bind(this);
+    this.onSignIn = this.onSignIn.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   componentDidMount() {
-    this.setState({ isLoading: false });
+    const obj = getFromStorage('life-tracker');
+    if (obj && obj.token) {
+      const { token } = obj;
+      // Verify token
+      fetch('/api/account/verify?token=' + token)
+        .then(res => res.json())
+        .then(json => {
+          if (json.success) {
+            this.setState({
+              token,
+              isLoading: false
+            });
+          } else {
+            this.setState({
+              isLoading: false
+            });
+          }
+        });
+    } else {
+      this.setState({
+        isLoading: false
+      });
+    }
   }
 
   onTextBoxChange(event) {
@@ -66,6 +91,72 @@ class Home extends Component {
           });
         }
       });
+  }
+
+  onSignIn() {
+    // Grab state
+    const { signInEmail, signInPassword } = this.state;
+    this.setState({
+      isLoading: true
+    });
+    // Post request to backend
+    fetch('/api/account/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: signInEmail,
+        password: signInPassword
+      })
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          setInStorage('life-tracker', { token: json.token });
+          this.setState({
+            signInError: json.message,
+            isLoading: false,
+            signInPassword: '',
+            signInEmail: '',
+            token: json.token
+          });
+        } else {
+          this.setState({
+            signInError: json.message,
+            isLoading: false
+          });
+        }
+      });
+  }
+
+  logout() {
+    this.setState({
+      isLoading: true
+    });
+    const obj = getFromStorage('life-tracker');
+    if (obj && obj.token) {
+      const { token } = obj;
+      // Verify token
+      fetch('/api/account/logout?token=' + token)
+        .then(res => res.json())
+        .then(json => {
+          if (json.success) {
+            this.setState({
+              token: '',
+              isLoading: false
+            });
+          } else {
+            this.setState({
+              isLoading: false
+            });
+          }
+        });
+    } else {
+      this.setState({
+        isLoading: false
+      });
+    }
   }
 
   render() {
@@ -151,7 +242,8 @@ class Home extends Component {
 
     return (
       <div>
-        <p>Signed in</p>
+        <p>Account</p>
+        <button onClick={this.logout}>Logout</button>
       </div>
     );
   }
