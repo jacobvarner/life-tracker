@@ -115,7 +115,7 @@ class Home extends Component {
               />
             </label>
             <br />
-            <button>Sign In</button>
+            <button onClick={this.onSignIn}>Sign In</button>
           </div>
           <br />
           <br />

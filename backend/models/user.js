@@ -6,7 +6,7 @@ const ObjectId = Schema.ObjectId;
 // Users
 const UserSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, default: 'First Last' },
+    name: { type: String },
     email: {
       type: String,
       lowercase: true,
@@ -15,7 +15,15 @@ const UserSchema = new mongoose.Schema(
       match: [/\S+@\S+\.\S+/, 'is invalid'],
       index: true
     },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    isDeleted: {
+      type: Boolean,
+      default: false
+    },
+    signUpDate: {
+      type: Date,
+      default: Date.now()
+    }
   },
   { timestamps: true }
 );
