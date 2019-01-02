@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const UserSessionSchema = new mongoose.Schema({
   userId: {
     type: String,
@@ -13,4 +14,5 @@ const UserSessionSchema = new mongoose.Schema({
     default: false
   }
 });
+
 module.exports = mongoose.model('UserSession', UserSessionSchema);

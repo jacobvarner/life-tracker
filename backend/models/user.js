@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 // Users
 const UserSchema = new mongoose.Schema(
@@ -15,7 +13,7 @@ const UserSchema = new mongoose.Schema(
       match: [/\S+@\S+\.\S+/, 'is invalid'],
       index: true
     },
-    password: { type: String, required: true },
+    password: { type: String, default: '' },
     isDeleted: {
       type: Boolean,
       default: false
@@ -28,11 +26,11 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-UserSchema.methods.generateHash = password => {
+UserSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-UserSchema.methods.validPassword = password => {
+UserSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
 

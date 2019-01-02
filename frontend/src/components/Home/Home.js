@@ -132,7 +132,8 @@ class Home extends Component {
 
   logout() {
     this.setState({
-      isLoading: true
+      isLoading: true,
+      signInError: ''
     });
     const obj = getFromStorage('life-tracker');
     if (obj && obj.token) {
@@ -142,6 +143,7 @@ class Home extends Component {
         .then(res => res.json())
         .then(json => {
           if (json.success) {
+            localStorage.removeItem('life-tracker');
             this.setState({
               token: '',
               isLoading: false

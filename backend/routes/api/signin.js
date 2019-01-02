@@ -91,6 +91,8 @@ module.exports = app => {
           });
         }
         const user = users[0];
+        console.log(user);
+        console.log(password);
         if (!user.validPassword(password)) {
           return res.send({
             success: false,
