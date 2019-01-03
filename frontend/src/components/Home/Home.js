@@ -14,7 +14,9 @@ class Home extends Component {
       signInEmail: '',
       signInPassword: '',
       signUpEmail: '',
-      signUpPassword: ''
+      signUpPassword: '',
+      signUpFirstName: '',
+      signUpLastName: ''
     };
 
     this.onTextBoxChange = this.onTextBoxChange.bind(this);
@@ -60,7 +62,12 @@ class Home extends Component {
   }
 
   onSignUp() {
-    const { signUpEmail, signUpPassword } = this.state;
+    const {
+      signUpFirstName,
+      signUpLastName,
+      signUpEmail,
+      signUpPassword
+    } = this.state;
 
     this.setState({ isLoading: true });
 
@@ -72,7 +79,9 @@ class Home extends Component {
       },
       body: JSON.stringify({
         email: signUpEmail,
-        password: signUpPassword
+        password: signUpPassword,
+        firstName: signUpFirstName,
+        lastName: signUpLastName
       })
     })
       .then(res => res.json())
@@ -82,7 +91,9 @@ class Home extends Component {
             signUpError: json.message,
             isLoading: false,
             signUpEmail: '',
-            signUpPassword: ''
+            signUpPassword: '',
+            signUpFirstName: '',
+            signUpLastName: ''
           });
         } else {
           this.setState({
@@ -170,7 +181,9 @@ class Home extends Component {
       signUpPassword,
       signInError,
       signInEmail,
-      signInPassword
+      signInPassword,
+      signUpFirstName,
+      signUpLastName
     } = this.state;
 
     if (isLoading) {
@@ -216,6 +229,27 @@ class Home extends Component {
             {signUpError ? <p>{signUpError}</p> : null}
             <p>Sign Up</p>
             <label>
+              FirstName:
+              <input
+                type="text"
+                name="signUpFirstName"
+                placeholder="Alex"
+                value={signUpFirstName}
+                onChange={this.onTextBoxChange}
+              />
+            </label>
+            <label>
+              Last Name:
+              <input
+                type="text"
+                name="signUpLastName"
+                placeholder="Smith"
+                value={signUpLastName}
+                onChange={this.onTextBoxChange}
+              />
+            </label>
+            <br />
+            <label>
               Email:
               <input
                 type="email"
@@ -244,7 +278,7 @@ class Home extends Component {
 
     return (
       <div>
-        <p>Account</p>
+        <p>Hello, {this.getLoggedInUser}</p>
         <button onClick={this.logout}>Logout</button>
       </div>
     );

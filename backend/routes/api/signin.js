@@ -6,7 +6,7 @@ module.exports = app => {
   app.post('/api/account/signup', (req, res, next) => {
     const { body } = req;
     const { password } = body;
-    let { email } = body;
+    let { email, firstName, lastName } = body;
 
     if (!email) {
       return res.send({
@@ -22,6 +22,20 @@ module.exports = app => {
     }
     email = email.toLowerCase();
     email = email.trim();
+
+    firstName = firstName
+      .toLowerCase()
+      .trim()
+      .split('');
+    firstName[0] = firstName[0].toUpperCase();
+    firstName = firstName.join('');
+
+    lastName = lastName
+      .toLowerCase()
+      .trim()
+      .split('');
+    lastName[0] = lastName[0].toUpperCase();
+    lastName = lastName.join('');
 
     // Verify email address has not been used
     User.find({ email: email }, (err, previousUsers) => {
@@ -39,6 +53,8 @@ module.exports = app => {
       // Save the new user
       const newUser = new User();
       newUser.email = email;
+      if (firstName) newUser.firstName = firstName;
+      if (lastName) newUser.lastName = lastName;
       newUser.password = newUser.generateHash(password);
       newUser.save((err, user) => {
         if (err) {
