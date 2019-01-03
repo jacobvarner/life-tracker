@@ -5,9 +5,11 @@
   "dependencies": {
     "concurrently": "^4.1.0",
     "fs": "0.0.1-security",
+    "jest": "^23.6.0",
     "path": "^0.12.7"
   },
   "scripts": {
-    "start": "concurrently \"cd backend && node server.js\" \"cd frontend && npm start\""
+    "start": "concurrently \"cd backend && node server.js\" \"cd frontend && npm start\"",
+    "test": "jest"
   }
 }
