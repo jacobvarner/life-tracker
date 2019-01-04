@@ -160,6 +160,7 @@ class Account extends Component {
             localStorage.removeItem('life-tracker');
             this.setState({
               token: '',
+              currentUser: '',
               isLoading: false
             });
           } else {
