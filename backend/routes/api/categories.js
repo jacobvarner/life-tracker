@@ -1,7 +1,7 @@
 const User = require('../../models/User');
 const Category = require('../../models/Category');
 
-module.export = app => {
+module.exports = app => {
   // Create a new category for a user
   app.post('/api/category/new', (req, res) => {
     const { body } = req;
