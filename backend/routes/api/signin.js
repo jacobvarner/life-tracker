@@ -107,8 +107,7 @@ module.exports = app => {
           });
         }
         const user = users[0];
-        console.log(user);
-        console.log(password);
+        let sessionId = '';
         if (!user.validPassword(password)) {
           return res.send({
             success: false,
@@ -125,10 +124,15 @@ module.exports = app => {
               message: 'Error: server error'
             });
           }
+
+          console.log('User: ' + user);
+          console.log('doc._id: ' + doc._id);
+
           return res.send({
             success: true,
             message: 'Valid sign in',
-            token: doc._id
+            token: doc._id,
+            user: user
           });
         });
       }
@@ -180,7 +184,6 @@ module.exports = app => {
       },
       (err, sessions) => {
         if (err) {
-          console.log(err);
           return res.send({
             success: false,
             message: 'Error: Server error'
@@ -192,10 +195,19 @@ module.exports = app => {
             message: 'Error: Invalid'
           });
         } else {
-          // DO ACTION
-          return res.send({
-            success: true,
-            message: 'Good'
+          // Do action
+          User.findById(sessions[0].userId, (err, user) => {
+            if (err) {
+              res.send({
+                success: false,
+                message: 'User not found'
+              });
+            }
+            res.send({
+              success: true,
+              message: 'User found',
+              user: user
+            });
           });
         }
       }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
 import { setInStorage, getFromStorage } from '../../utils/storage';
+import { timingSafeEqual } from 'crypto';
 
 class Home extends Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class Home extends Component {
       signUpEmail: '',
       signUpPassword: '',
       signUpFirstName: '',
-      signUpLastName: ''
+      signUpLastName: '',
+      currentUser: ''
     };
 
     this.onTextBoxChange = this.onTextBoxChange.bind(this);
@@ -36,6 +38,7 @@ class Home extends Component {
           if (json.success) {
             this.setState({
               token,
+              currentUser: json.user,
               isLoading: false
             });
           } else {
@@ -130,7 +133,8 @@ class Home extends Component {
             isLoading: false,
             signInPassword: '',
             signInEmail: '',
-            token: json.token
+            token: json.token,
+            currentUser: json.user
           });
         } else {
           this.setState({
@@ -183,8 +187,11 @@ class Home extends Component {
       signInEmail,
       signInPassword,
       signUpFirstName,
-      signUpLastName
+      signUpLastName,
+      currentUser
     } = this.state;
+
+    let user = currentUser.firstName + ' ' + currentUser.lastName;
 
     if (isLoading) {
       return (
@@ -278,7 +285,7 @@ class Home extends Component {
 
     return (
       <div>
-        <p>Hello, {this.getLoggedInUser}</p>
+        <p>Hello, {user}!</p>
         <button onClick={this.logout}>Logout</button>
       </div>
     );
