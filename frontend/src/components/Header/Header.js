@@ -15,6 +15,8 @@ class Header extends Component {
       currentUser: '',
       isLoading: false
     };
+
+    this.updateTokenAndUser = this.updateTokenAndUser.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +46,10 @@ class Header extends Component {
     }
   }
 
+  updateTokenAndUser(token, user) {
+    this.setState({ currentUser: user, token: token });
+  }
+
   render() {
     return (
       <header>
@@ -55,7 +61,11 @@ class Header extends Component {
           <NewCategory user={this.state.currentUser} />
         )}
 
-        <Account />
+        <Account
+          updateTokenAndUser={this.updateTokenAndUser}
+          currentUser={this.state.currentUser}
+          token={this.state.token}
+        />
 
         <hr />
       </header>

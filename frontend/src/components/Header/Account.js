@@ -7,8 +7,7 @@ class Account extends Component {
     super(props);
 
     this.state = {
-      isLoading: true,
-      token: '',
+      isLoading: false,
       signUpError: '',
       signInError: '',
       signInEmail: '',
@@ -16,41 +15,13 @@ class Account extends Component {
       signUpEmail: '',
       signUpPassword: '',
       signUpFirstName: '',
-      signUpLastName: '',
-      currentUser: ''
+      signUpLastName: ''
     };
 
     this.onTextBoxChange = this.onTextBoxChange.bind(this);
     this.onSignUp = this.onSignUp.bind(this);
     this.onSignIn = this.onSignIn.bind(this);
     this.logout = this.logout.bind(this);
-  }
-
-  componentDidMount() {
-    const obj = getFromStorage('life-tracker');
-    if (obj && obj.token) {
-      const { token } = obj;
-      // Verify token
-      fetch('/api/account/verify?token=' + token)
-        .then(res => res.json())
-        .then(json => {
-          if (json.success) {
-            this.setState({
-              token,
-              currentUser: json.user,
-              isLoading: false
-            });
-          } else {
-            this.setState({
-              isLoading: false
-            });
-          }
-        });
-    } else {
-      this.setState({
-        isLoading: false
-      });
-    }
   }
 
   onTextBoxChange(event) {
@@ -127,13 +98,12 @@ class Account extends Component {
       .then(json => {
         if (json.success) {
           setInStorage('life-tracker', { token: json.token });
+          this.props.updateTokenAndUser(json.token, json.user);
           this.setState({
             signInError: json.message,
             isLoading: false,
             signInPassword: '',
-            signInEmail: '',
-            token: json.token,
-            currentUser: json.user
+            signInEmail: ''
           });
         } else {
           this.setState({
@@ -158,9 +128,8 @@ class Account extends Component {
         .then(json => {
           if (json.success) {
             localStorage.removeItem('life-tracker');
+            this.props.updateTokenAndUser('', '');
             this.setState({
-              token: '',
-              currentUser: '',
               isLoading: false
             });
           } else {
@@ -179,7 +148,6 @@ class Account extends Component {
   render() {
     const {
       isLoading,
-      token,
       signUpError,
       signUpEmail,
       signUpPassword,
@@ -187,11 +155,11 @@ class Account extends Component {
       signInEmail,
       signInPassword,
       signUpFirstName,
-      signUpLastName,
-      currentUser
+      signUpLastName
     } = this.state;
 
-    let user = currentUser.firstName + ' ' + currentUser.lastName;
+    let user =
+      this.props.currentUser.firstName + ' ' + this.props.currentUser.lastName;
 
     if (isLoading) {
       return (
@@ -201,7 +169,7 @@ class Account extends Component {
       );
     }
 
-    if (!token) {
+    if (!this.props.token) {
       return (
         <div>
           <div>

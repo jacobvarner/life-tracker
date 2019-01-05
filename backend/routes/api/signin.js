@@ -125,9 +125,6 @@ module.exports = app => {
             });
           }
 
-          console.log('User: ' + user);
-          console.log('doc._id: ' + doc._id);
-
           return res.send({
             success: true,
             message: 'Valid sign in',
@@ -158,7 +155,6 @@ module.exports = app => {
       null,
       (err, sessions) => {
         if (err) {
-          console.log(err);
           return res.send({
             success: false,
             message: 'Error: Server error'
