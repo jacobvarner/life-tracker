@@ -14,7 +14,7 @@ class App extends Component {
       isLoading: false,
       token: '',
       currentUser: '',
-      view: 'main'
+      view: 'Home'
     };
 
     this.updateTokenAndUser = this.updateTokenAndUser.bind(this);
@@ -33,7 +33,8 @@ class App extends Component {
             this.setState({
               token,
               currentUser: json.user,
-              isLoading: false
+              isLoading: false,
+              view: 'Main'
             });
           } else {
             this.setState({

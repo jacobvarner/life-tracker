@@ -105,6 +105,7 @@ class Account extends Component {
         if (json.success) {
           setInStorage('life-tracker', { token: json.token });
           this.props.updateTokenAndUser(json.token, json.user);
+          this.props.updateView('Main');
           this.setState({
             signInError: json.message,
             isLoading: false,
@@ -135,6 +136,7 @@ class Account extends Component {
           if (json.success) {
             localStorage.removeItem('life-tracker');
             this.props.updateTokenAndUser('', '');
+            this.props.updateView('Home');
             this.setState({
               isLoading: false
             });

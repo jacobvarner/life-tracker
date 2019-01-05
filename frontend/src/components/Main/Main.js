@@ -8,9 +8,7 @@ class Main extends Component {
   }
 
   render() {
-    let view = this.props.view.split('');
-    view[0] = view[0].toUpperCase();
-    view = view.join('');
+    let view = this.props.view;
     return <h1>{view}</h1>;
   }
 }

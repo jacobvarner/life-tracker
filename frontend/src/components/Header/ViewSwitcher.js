@@ -12,11 +12,11 @@ class ViewSwitcher extends Component {
   }
 
   switchToLogView() {
-    this.props.updateView('log');
+    this.props.updateView('Log');
   }
 
   switchToMainView() {
-    this.props.updateView('main');
+    this.props.updateView('Main');
   }
 
   render() {
@@ -24,10 +24,10 @@ class ViewSwitcher extends Component {
     return (
       <div>
         <p>Switch Views</p>
-        <button disabled={view === 'main'} onClick={this.switchToMainView}>
+        <button disabled={view === 'Main'} onClick={this.switchToMainView}>
           Main
         </button>
-        <button disabled={view === 'log'} onClick={this.switchToLogView}>
+        <button disabled={view === 'Log'} onClick={this.switchToLogView}>
           Log
         </button>
       </div>

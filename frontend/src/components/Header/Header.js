@@ -34,6 +34,7 @@ class Header extends Component {
           updateTokenAndUser={this.props.updateTokenAndUser}
           currentUser={this.props.currentUser}
           token={this.props.token}
+          updateView={this.props.updateView}
         />
 
         <hr />
