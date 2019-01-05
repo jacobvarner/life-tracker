@@ -74,4 +74,27 @@ module.exports = app => {
       }
     });
   });
+
+  // Gets categories for a user
+  app.get('/api/category', (req, res) => {
+    const { query } = req;
+    const { userId, archived } = query;
+    Category.find({ userId: userId, archived: archived }, (err, categories) => {
+      if (err) {
+        res.send({ success: false, message: 'Error: Server error' });
+      }
+      if (!categories.length > 0) {
+        res.send({
+          success: false,
+          message: 'Error: No categories found for this user.'
+        });
+      } else {
+        res.send({
+          success: true,
+          message: categories.length + ' categories found!',
+          categories: categories
+        });
+      }
+    });
+  });
 };

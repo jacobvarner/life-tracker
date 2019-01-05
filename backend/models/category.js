@@ -8,7 +8,7 @@ const CategorySchema = new mongoose.Schema(
     goal: { type: Number, required: true },
     unit: { type: String, required: true },
     userId: { type: String, required: true },
-    status: { type: String, default: 'active' }
+    archived: { type: Boolean, default: false }
   },
   { timestamps: true }
 );
