@@ -5,7 +5,7 @@ module.exports = app => {
   //New User Signup
   app.post('/api/account/signup', (req, res, next) => {
     const { body } = req;
-    const { password } = body;
+    const { password, confirmPassword } = body;
     let { email, firstName, lastName } = body;
 
     if (!email) {
@@ -18,6 +18,12 @@ module.exports = app => {
       return res.send({
         success: false,
         message: 'Error: Password cannot be blank.'
+      });
+    }
+    if (password !== confirmPassword) {
+      return res.send({
+        success: false,
+        message: 'Error: Passwords do not match.'
       });
     }
     email = email.toLowerCase();

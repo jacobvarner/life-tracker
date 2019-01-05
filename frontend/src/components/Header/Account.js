@@ -15,13 +15,16 @@ class Account extends Component {
       signUpEmail: '',
       signUpPassword: '',
       signUpFirstName: '',
-      signUpLastName: ''
+      signUpLastName: '',
+      currentForm: 'links'
     };
 
     this.onTextBoxChange = this.onTextBoxChange.bind(this);
     this.onSignUp = this.onSignUp.bind(this);
     this.onSignIn = this.onSignIn.bind(this);
     this.logout = this.logout.bind(this);
+    this.openSignIn = this.openSignIn.bind(this);
+    this.openSignUp = this.openSignUp.bind(this);
   }
 
   onTextBoxChange(event) {
@@ -39,7 +42,8 @@ class Account extends Component {
       signUpFirstName,
       signUpLastName,
       signUpEmail,
-      signUpPassword
+      signUpPassword,
+      signUpConfirmPassword
     } = this.state;
 
     this.setState({ isLoading: true });
@@ -53,6 +57,7 @@ class Account extends Component {
       body: JSON.stringify({
         email: signUpEmail,
         password: signUpPassword,
+        confirmPassword: signUpConfirmPassword,
         firstName: signUpFirstName,
         lastName: signUpLastName
       })
@@ -65,6 +70,7 @@ class Account extends Component {
             isLoading: false,
             signUpEmail: '',
             signUpPassword: '',
+            signUpConfirmPassword: '',
             signUpFirstName: '',
             signUpLastName: ''
           });
@@ -145,17 +151,31 @@ class Account extends Component {
     }
   }
 
+  openSignIn() {
+    this.setState({
+      currentForm: 'signin'
+    });
+  }
+
+  openSignUp() {
+    this.setState({
+      currentForm: 'signup'
+    });
+  }
+
   render() {
     const {
       isLoading,
       signUpError,
       signUpEmail,
       signUpPassword,
+      signUpConfirmPassword,
       signInError,
       signInEmail,
       signInPassword,
       signUpFirstName,
-      signUpLastName
+      signUpLastName,
+      currentForm
     } = this.state;
 
     let user =
@@ -170,8 +190,19 @@ class Account extends Component {
     }
 
     if (!this.props.token) {
-      return (
-        <div>
+      if (currentForm === 'links') {
+        return (
+          <div>
+            <a href="#" onClick={this.openSignIn}>
+              Sign In
+            </a>
+            <a href="#" onClick={this.openSignUp}>
+              Sign Up
+            </a>
+          </div>
+        );
+      } else if (currentForm === 'signin') {
+        return (
           <div>
             {signInError ? <p>{signInError}</p> : null}
             <p>Sign In</p>
@@ -197,14 +228,18 @@ class Account extends Component {
             </label>
             <br />
             <button onClick={this.onSignIn}>Sign In</button>
+            <a href="#" onClick={this.openSignUp}>
+              New? Sign Up
+            </a>
           </div>
-          <br />
-          <br />
+        );
+      } else if (currentForm === 'signup') {
+        return (
           <div>
             {signUpError ? <p>{signUpError}</p> : null}
             <p>Sign Up</p>
             <label>
-              FirstName:
+              First Name:
               <input
                 type="text"
                 name="signUpFirstName"
@@ -245,10 +280,23 @@ class Account extends Component {
               />
             </label>
             <br />
+            <label>
+              Confirm Password:
+              <input
+                type="password"
+                name="signUpConfirmPassword"
+                value={signUpConfirmPassword}
+                onChange={this.onTextBoxChange}
+              />
+            </label>
+            <br />
             <button onClick={this.onSignUp}>Sign Up</button>
+            <a href="#" onClick={this.openSignIn}>
+              Returning? Sign In
+            </a>
           </div>
-        </div>
-      );
+        );
+      }
     }
 
     return (
