@@ -8,7 +8,10 @@ class Main extends Component {
   }
 
   render() {
-    return <h1>Home</h1>;
+    let view = this.props.view.split('');
+    view[0] = view[0].toUpperCase();
+    view = view.join('');
+    return <h1>{view}</h1>;
   }
 }
 

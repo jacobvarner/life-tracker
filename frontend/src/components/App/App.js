@@ -13,10 +13,12 @@ class App extends Component {
     this.state = {
       isLoading: false,
       token: '',
-      currentUser: ''
+      currentUser: '',
+      view: 'main'
     };
 
     this.updateTokenAndUser = this.updateTokenAndUser.bind(this);
+    this.updateView = this.updateView.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +52,10 @@ class App extends Component {
     this.setState({ currentUser: user, token: token });
   }
 
+  updateView(view) {
+    this.setState({ view: view });
+  }
+
   render() {
     return (
       <div>
@@ -57,8 +63,10 @@ class App extends Component {
           updateTokenAndUser={this.updateTokenAndUser}
           currentUser={this.state.currentUser}
           token={this.state.token}
+          updateView={this.updateView}
+          view={this.state.view}
         />
-        <Main />
+        <Main currentUser={this.state.currentUser} view={this.state.view} />
         <Footer />
       </div>
     );
