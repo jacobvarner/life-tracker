@@ -193,12 +193,8 @@ class Account extends Component {
       if (currentForm === 'links') {
         return (
           <div>
-            <a href="#" onClick={this.openSignIn}>
-              Sign In
-            </a>
-            <a href="#" onClick={this.openSignUp}>
-              Sign Up
-            </a>
+            <button onClick={this.openSignIn}>Sign In</button>
+            <button onClick={this.openSignUp}>Sign Up</button>
           </div>
         );
       } else if (currentForm === 'signin') {
@@ -228,9 +224,7 @@ class Account extends Component {
             </label>
             <br />
             <button onClick={this.onSignIn}>Sign In</button>
-            <a href="#" onClick={this.openSignUp}>
-              New? Sign Up
-            </a>
+            <button onClick={this.openSignUp}>New? Sign Up</button>
           </div>
         );
       } else if (currentForm === 'signup') {
@@ -291,9 +285,7 @@ class Account extends Component {
             </label>
             <br />
             <button onClick={this.onSignUp}>Sign Up</button>
-            <a href="#" onClick={this.openSignIn}>
-              Returning? Sign In
-            </a>
+            <button onClick={this.openSignIn}>Returning? Sign In</button>
           </div>
         );
       }
