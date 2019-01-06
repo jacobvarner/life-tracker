@@ -82,6 +82,8 @@ module.exports = app => {
     if (archived) {
       Category.find(
         { userId: userId, archived: archived },
+        null,
+        { sort: { archived: 1, name: 1 } },
         (err, categories) => {
           if (err) {
             res.send({ success: false, message: 'Error: Server error' });
@@ -101,23 +103,28 @@ module.exports = app => {
         }
       );
     } else {
-      Category.find({ userId: userId }, (err, categories) => {
-        if (err) {
-          res.send({ success: false, message: 'Error: Server error' });
+      Category.find(
+        { userId: userId },
+        null,
+        { sort: { archived: 1, name: 1 } },
+        (err, categories) => {
+          if (err) {
+            res.send({ success: false, message: 'Error: Server error' });
+          }
+          if (!categories.length > 0) {
+            res.send({
+              success: false,
+              message: 'Error: No categories found for this user.'
+            });
+          } else {
+            res.send({
+              success: true,
+              message: categories.length + ' categories found!',
+              categories: categories
+            });
+          }
         }
-        if (!categories.length > 0) {
-          res.send({
-            success: false,
-            message: 'Error: No categories found for this user.'
-          });
-        } else {
-          res.send({
-            success: true,
-            message: categories.length + ' categories found!',
-            categories: categories
-          });
-        }
-      });
+      );
     }
   });
 };
