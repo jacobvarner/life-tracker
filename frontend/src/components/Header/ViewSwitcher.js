@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import 'whatwg-fetch';
 
 class ViewSwitcher extends Component {
   constructor(props) {

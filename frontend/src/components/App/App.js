@@ -67,7 +67,9 @@ class App extends Component {
           updateView={this.updateView}
           view={this.state.view}
         />
-        <Main currentUser={this.state.currentUser} view={this.state.view} />
+        {this.state.currentUser && (
+          <Main currentUser={this.state.currentUser} view={this.state.view} />
+        )}
         <Footer />
       </div>
     );

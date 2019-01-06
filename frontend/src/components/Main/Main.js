@@ -1,15 +1,92 @@
 import React, { Component } from 'react';
 
+import CategoriesContainer from './CategoriesContainer';
+import ShowArchived from './ShowArchived';
+
+import 'whatwg-fetch';
+
 class Main extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      isLoading: false,
+      showArchived: false,
+      categories: ''
+    };
+
+    this.updateShowArchived = this.updateShowArchived.bind(this);
+    this.updateCategories = this.updateCategories.bind(this);
+  }
+
+  componentDidMount() {
+    this.updateCategories();
+  }
+
+  componentDidUpdate() {}
+
+  updateCategories() {
+    let userId = this.props.currentUser._id;
+
+    console.log('archived: ' + this.state.showArchived);
+
+    this.setState({
+      isLoading: true
+    });
+
+    let query = '&archived=false';
+    if (this.state.showArchived) {
+      query = '';
+    }
+
+    fetch('/api/category?userId=' + userId + query)
+      .then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.setState({
+            isLoading: false,
+            categories: json.categories
+          });
+        } else {
+          this.setState({
+            isLoading: false
+          });
+        }
+      });
+  }
+
+  updateShowArchived(value) {
+    this.setState({
+      showArchived: value
+    });
+    console.log('archived: ' + this.state.showArchived);
   }
 
   render() {
     let view = this.props.view;
-    return <h1>{view}</h1>;
+
+    if (this.state.isLoading) {
+      return (
+        <div>
+          <p>Loading...</p>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <h1>{view}</h1>
+          {this.state.categories && (
+            <CategoriesContainer categories={this.state.categories} />
+          )}
+          {this.state.categories && (
+            <ShowArchived
+              archived={this.state.showArchived}
+              updateShowArchived={this.updateShowArchived}
+            />
+          )}
+        </div>
+      );
+    }
   }
 }
 
