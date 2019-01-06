@@ -23,12 +23,8 @@ class Main extends Component {
     this.updateCategories();
   }
 
-  componentDidUpdate() {}
-
   updateCategories() {
     let userId = this.props.currentUser._id;
-
-    console.log('archived: ' + this.state.showArchived);
 
     this.setState({
       isLoading: true
@@ -56,10 +52,14 @@ class Main extends Component {
   }
 
   updateShowArchived(value) {
-    this.setState({
-      showArchived: value
-    });
-    console.log('archived: ' + this.state.showArchived);
+    this.setState(
+      {
+        showArchived: value
+      },
+      () => {
+        this.updateCategories();
+      }
+    );
   }
 
   render() {

@@ -21,7 +21,6 @@ class ShowArchived extends Component {
 
   toggle() {
     let archived = this.props.archived;
-    console.log('archived: ' + archived);
     if (archived) {
       this.props.updateShowArchived(!archived);
       this.setState({
