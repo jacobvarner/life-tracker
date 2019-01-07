@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 // Entries - Linked to Category by categoryId
 const EntrySchema = new mongoose.Schema(
@@ -8,8 +7,8 @@ const EntrySchema = new mongoose.Schema(
     title: String,
     description: String,
     value: { type: Number, required: true },
-    date: { type: Date, default: Date.now },
-    categoryId: { type: ObjectId, required: true }
+    date: { type: Date, required: true },
+    categoryId: { type: String, required: true }
   },
   { timestamps: true }
 );
