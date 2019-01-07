@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Category from './Category';
 
 class CategoriesContainer extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class CategoriesContainer extends Component {
       return <div>Failed</div>;
     }
     const listCategories = categories.map(category => {
-      return <li key={category.name}>{category.name}</li>;
+      return <Category key={category.name} category={category} />;
     });
 
     return <ul>{listCategories}</ul>;
