@@ -34,32 +34,32 @@ class CategoriesContainer extends Component {
   }
 
   moveWeekForward() {
-    if (this.state.weekEnd === this.state.today) {
+    if (this.state.endDate === this.state.today) {
       return { success: false, message: 'Error: You are already at today.' };
     } else {
-      let weekStart = new Date(
-        new Date(this.state.weekStart) + 604800000
+      let startDate = new Date(
+        new Date(this.state.startDate) + 604800000
       ).toLocaleDateString();
-      let weekEnd = new Date(
-        new Date(this.state.weekEnd) + 604800000
+      let endDate = new Date(
+        new Date(this.state.endDate) + 604800000
       ).toLocaleDateString();
       this.setState({
-        weekStart: weekStart,
-        weekEnd: weekEnd
+        startDate: startDate,
+        endDate: endDate
       });
     }
   }
 
   moveWeekBackward() {
-    let weekStart = new Date(
-      new Date(this.state.weekStart) - 604800000
+    let startDate = new Date(
+      new Date(this.state.startDate) - 604800000
     ).toLocaleDateString();
-    let weekEnd = new Date(
-      new Date(this.state.weekEnd) - 604800000
+    let endDate = new Date(
+      new Date(this.state.endDate) - 604800000
     ).toLocaleDateString();
     this.setState({
-      weekStart: weekStart,
-      weekEnd: weekEnd
+      startDate: startDate,
+      endDate: endDate
     });
   }
 
