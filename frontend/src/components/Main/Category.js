@@ -8,7 +8,7 @@ class Category extends Component {
   }
 
   render() {
-    return <li>{this.props.category.name}</li>;
+    return <section>{this.props.category.name}</section>;
   }
 }
 
