@@ -33,9 +33,35 @@ class CategoriesContainer extends Component {
     });
   }
 
-  moveWeekForward() {}
+  moveWeekForward() {
+    if (this.state.weekEnd === this.state.today) {
+      return { success: false, message: 'Error: You are already at today.' };
+    } else {
+      let weekStart = new Date(
+        new Date(this.state.weekStart) + 604800000
+      ).toLocaleDateString();
+      let weekEnd = new Date(
+        new Date(this.state.weekEnd) + 604800000
+      ).toLocaleDateString();
+      this.setState({
+        weekStart: weekStart,
+        weekEnd: weekEnd
+      });
+    }
+  }
 
-  moveWeekBackward() {}
+  moveWeekBackward() {
+    let weekStart = new Date(
+      new Date(this.state.weekStart) - 604800000
+    ).toLocaleDateString();
+    let weekEnd = new Date(
+      new Date(this.state.weekEnd) - 604800000
+    ).toLocaleDateString();
+    this.setState({
+      weekStart: weekStart,
+      weekEnd: weekEnd
+    });
+  }
 
   render() {
     let categories = this.props.categories;
@@ -52,6 +78,11 @@ class CategoriesContainer extends Component {
         <p>Today's Date: {this.state.today}</p>
         <p>Week Start: {this.state.startDate}</p>
         <p>Week End: {this.state.endDate}</p>
+        <div>
+          <button onClick={this.moveWeekBackward}>Back</button>
+          <button onClick={this.getCurrentWeek}>Today</button>
+          <button onClick={this.moveWeekForward}>Forward</button>
+        </div>
         {listCategories}
       </div>
     );
