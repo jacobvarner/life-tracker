@@ -17,7 +17,7 @@ class CategoriesContainer extends Component {
     this.moveWeekBackward = this.moveWeekBackward.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.getCurrentWeek();
   }
 
@@ -70,7 +70,14 @@ class CategoriesContainer extends Component {
       return <div>Failed</div>;
     }
     const listCategories = categories.map(category => {
-      return <Category key={category.name} category={category} />;
+      return (
+        <Category
+          key={category.name}
+          category={category}
+          startDate={this.state.startDate}
+          endDate={this.state.endDate}
+        />
+      );
     });
 
     return (

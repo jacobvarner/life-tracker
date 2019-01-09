@@ -73,4 +73,14 @@ module.exports = app => {
       }
     });
   });
+
+  app.get('/api/entry', (req, res) => {
+    const { query } = req;
+    const { start, end, id } = query;
+
+    let startDate = new Date(start);
+    let endDate = new Date(end);
+    console.log('start: ' + startDate);
+    console.log('end: ' + endDate);
+  });
 };
