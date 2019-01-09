@@ -16,6 +16,15 @@ class Category extends Component {
     this.getEntries();
   }
 
+  componentDidUpdate(prevProps) {
+    if (
+      JSON.stringify(this.props.startDate) !==
+      JSON.stringify(prevProps.startDate)
+    ) {
+      this.getEntries();
+    }
+  }
+
   getEntries() {
     let start = this.props.startDate;
     let end = this.props.endDate;
