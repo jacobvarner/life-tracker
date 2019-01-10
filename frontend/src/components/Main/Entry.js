@@ -7,6 +7,7 @@ class Entry extends Component {
 
     this.state = {
       isFormOpen: false,
+      isDetailOpen: false,
       date: this.props.date,
       value: this.props.value,
       goal: this.props.goal,
@@ -15,11 +16,29 @@ class Entry extends Component {
       description: this.props.description,
       complete: this.props.complete
     };
+
+    this.openEntryDetail = this.openEntryDetail.bind(this);
+    this.openEntryForm = this.openEntryForm.bind(this);
+    this.submitEntry = this.submitEntry.bind(this);
+  }
+
+  openEntryDetail() {
+    this.setState({ isDetailOpen: true });
+  }
+
+  openEntryForm() {
+    this.setState({ isFormOpen: true, isDetailOpen: true });
+  }
+
+  submitEntry() {
+    // Will handle submitting new entry and editing existing entry
+    this.setState({ isFormOpen: false, isDetailOpen: false });
   }
 
   render() {
     const {
       isFormOpen,
+      isDetailOpen,
       date,
       value,
       goal,
@@ -29,9 +48,9 @@ class Entry extends Component {
       complete
     } = this.state;
 
-    if (!isFormOpen) {
+    if (!isDetailOpen) {
       return (
-        <button>
+        <button onClick={complete ? this.openEntryDetail : this.openEntryForm}>
           <p>{date.toLocaleDateString()}</p>
           {complete ? (
             <p>{value + '/' + goal + ' ' + unit}</p>
@@ -40,16 +59,24 @@ class Entry extends Component {
           )}
         </button>
       );
+    } else if (!isFormOpen) {
+      return (
+        <div>
+          <p>{date.toLocaleDateString()}</p>
+          <h2>{title}</h2>
+          <p>{description}</p>
+          <p>{value + '/' + goal + ' ' + unit}</p>
+          <button onClick={this.openEntryForm}>Edit</button>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p>This will be a form...</p>
+          <button onClick={this.submitEntry}>Submit</button>
+        </div>
+      );
     }
-    return (
-      <div>
-        <p>{this.props.date.toLocaleDateString()}</p>
-        <p>{this.props.value}</p>
-        <p>{this.props.goal + ' ' + this.props.unit}</p>
-        <p>{this.props.title}</p>
-        <p>{this.props.description}</p>
-      </div>
-    );
   }
 }
 
