@@ -38,10 +38,10 @@ class CategoriesContainer extends Component {
       return { success: false, message: 'Error: You are already at today.' };
     } else {
       let startDate = new Date(
-        new Date(this.state.startDate) + 604800000
+        new Date(this.state.startDate).getTime() + 604800000
       ).toLocaleDateString();
       let endDate = new Date(
-        new Date(this.state.endDate) + 604800000
+        new Date(this.state.endDate).getTime() + 604800000
       ).toLocaleDateString();
       this.setState({
         startDate: startDate,

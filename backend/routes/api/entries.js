@@ -80,7 +80,36 @@ module.exports = app => {
 
     let startDate = new Date(start);
     let endDate = new Date(end);
-    console.log('start: ' + startDate);
-    console.log('end: ' + endDate);
+
+    Entry.find(
+      {
+        categoryId: id,
+        date: { $gte: startDate, $lte: endDate },
+        sort: { date: 1 }
+      },
+      (err, entries) => {
+        if (err) {
+          res.send({ success: false, message: 'Error: Server error.' });
+        }
+
+        if (!entries.length > 0) {
+          res.send({
+            success: false,
+            message: 'Error: Did not find any entries.'
+          });
+        } else if (entries.length > 7) {
+          res.send({
+            success: false,
+            message: 'Error: Found too many entries.'
+          });
+        } else {
+          res.send({
+            success: true,
+            message: 'Here are the found entries for this week!',
+            entries: entries
+          });
+        }
+      }
+    );
   });
 };

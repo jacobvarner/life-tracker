@@ -6,14 +6,20 @@ class Category extends Component {
     super(props);
 
     this.state = {
-      isLoading: false
+      isLoading: false,
+      entriesRaw: '',
+      entriesWeekArray: '',
+      dateArray: ''
     };
 
     this.getEntries = this.getEntries.bind(this);
+    //this.assignEntries = this.assignEntries.bind(this);
+    this.getDateArray = this.getDateArray.bind(this);
   }
 
   componentDidMount() {
     this.getEntries();
+    this.getDateArray();
   }
 
   componentDidUpdate(prevProps) {
@@ -22,6 +28,7 @@ class Category extends Component {
       JSON.stringify(prevProps.startDate)
     ) {
       this.getEntries();
+      this.getDateArray();
     }
   }
 
@@ -30,18 +37,42 @@ class Category extends Component {
     let end = this.props.endDate;
     let id = this.props.category._id;
 
-    console.log('front end start: ' + start);
-    console.log('front end end: ' + end);
-
     this.setState({ isLoading: true });
 
     fetch('/api/entry?id=' + id + '&start=' + start + '&end=' + end)
       .then(res => res.json())
       .then(json => {
         if (json.success) {
+          this.setState({
+            entriesRaw: json.entries,
+            isLoading: false
+          });
+        } else {
+          this.setState({
+            isLoading: false,
+            entriesRaw: null
+          });
         }
-      })
-      .then(this.setState({ isLoading: false }));
+      });
+  }
+
+  /*assignEntries() {
+    let default = {complete: false, value: 0, date:}
+    if (this.state.entriesRaw === null) {
+    } else {
+
+    }
+  }*/
+
+  getDateArray() {
+    let start = new Date(this.props.startDate);
+    let dateArray = [start];
+    let oneDay = 24 * 60 * 60 * 1000;
+    for (let i = 1; i < 7; i++) {
+      let date = new Date(start.getTime() + i * oneDay);
+      dateArray.push(date);
+    }
+    this.setState({ dateArray: dateArray });
   }
 
   render() {
