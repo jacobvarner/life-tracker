@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
+import Entry from './Entry';
 
 class Category extends Component {
   constructor(props) {
@@ -7,17 +8,15 @@ class Category extends Component {
 
     this.state = {
       isLoading: false,
-      entriesRaw: '',
-      entriesWeekArray: '',
+      entries: '',
       dateArray: ''
     };
 
     this.getEntries = this.getEntries.bind(this);
-    //this.assignEntries = this.assignEntries.bind(this);
     this.getDateArray = this.getDateArray.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.getEntries();
     this.getDateArray();
   }
@@ -56,14 +55,6 @@ class Category extends Component {
       });
   }
 
-  /*assignEntries() {
-    let default = {complete: false, value: 0, date:}
-    if (this.state.entriesRaw === null) {
-    } else {
-
-    }
-  }*/
-
   getDateArray() {
     let start = new Date(this.props.startDate);
     let dateArray = [start];
@@ -76,7 +67,60 @@ class Category extends Component {
   }
 
   render() {
-    return <section>{this.props.category.name}</section>;
+    let dateArray = this.state.dateArray;
+    let entriesArray;
+    if (this.state.entriesRaw === null) {
+      entriesArray = dateArray.map(date => {
+        return (
+          <Entry
+            key={date}
+            date={date}
+            value={0}
+            goal={this.props.category.goal}
+            description={''}
+            title={''}
+            complete={false}
+          />
+        );
+      });
+    } else {
+      entriesArray = dateArray.map(date => {
+        let index = this.state.entries.indexOf(date);
+        if (index !== -1) {
+          let entry = this.state.entries[index];
+          return (
+            <Entry
+              key={date}
+              date={date}
+              value={entry.value}
+              goal={this.props.category.goal}
+              description={entry.description}
+              title={entry.title}
+              complete={true}
+            />
+          );
+        } else {
+          return (
+            <Entry
+              key={date}
+              date={date}
+              value={0}
+              goal={this.props.category.goal}
+              description={''}
+              title={''}
+              complete={false}
+            />
+          );
+        }
+      });
+    }
+
+    return (
+      <section>
+        <h2>{this.props.category.name}</h2>
+        {entriesArray}
+      </section>
+    );
   }
 }
 
