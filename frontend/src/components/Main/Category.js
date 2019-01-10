@@ -77,6 +77,7 @@ class Category extends Component {
             date={date}
             value={0}
             goal={this.props.category.goal}
+            unit={this.props.category.unit}
             description={''}
             title={''}
             complete={false}
@@ -94,6 +95,7 @@ class Category extends Component {
               date={date}
               value={entry.value}
               goal={this.props.category.goal}
+              unit={this.props.category.unit}
               description={entry.description}
               title={entry.title}
               complete={true}
@@ -106,6 +108,7 @@ class Category extends Component {
               date={date}
               value={0}
               goal={this.props.category.goal}
+              unit={this.props.category.unit}
               description={''}
               title={''}
               complete={false}
