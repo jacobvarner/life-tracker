@@ -8,6 +8,9 @@ class Entry extends Component {
     this.state = {
       isFormOpen: false,
       isDetailOpen: false,
+      entryTitle: '',
+      entryDescription: '',
+      entryValue: '',
       date: this.props.date,
       value: this.props.value,
       goal: this.props.goal,
@@ -20,6 +23,7 @@ class Entry extends Component {
     this.openEntryDetail = this.openEntryDetail.bind(this);
     this.openEntryForm = this.openEntryForm.bind(this);
     this.submitEntry = this.submitEntry.bind(this);
+    this.onTextBoxChange = this.onTextBoxChange.bind(this);
   }
 
   openEntryDetail() {
@@ -35,10 +39,23 @@ class Entry extends Component {
     this.setState({ isFormOpen: false, isDetailOpen: false });
   }
 
+  onTextBoxChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
   render() {
     const {
       isFormOpen,
       isDetailOpen,
+      entryTitle,
+      entryDescription,
+      entryValue,
       date,
       value,
       goal,
@@ -72,7 +89,40 @@ class Entry extends Component {
     } else {
       return (
         <div>
-          <p>This will be a form...</p>
+          <label>
+            Entry Title
+            <br />
+            <input
+              type="text"
+              name="entryTitle"
+              value={entryTitle}
+              onChange={this.onTextBoxChange}
+            />
+          </label>
+          <br />
+          <label>
+            Entry Description
+            <br />
+            <input
+              type="text"
+              name="entryDescription"
+              value={entryDescription}
+              onChange={this.onTextBoxChange}
+            />
+          </label>
+          <br />
+          <label>
+            Entry Value
+            <br />
+            <input
+              type="number"
+              name="entryValue"
+              value={entryValue}
+              onChange={this.onTextBoxChange}
+            />
+            / {goal + ' ' + unit}
+          </label>
+          <br />
           <button onClick={this.submitEntry}>Submit</button>
         </div>
       );
