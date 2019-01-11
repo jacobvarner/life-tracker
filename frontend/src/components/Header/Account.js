@@ -212,6 +212,7 @@ class Account extends Component {
                 placeholder="placeholder@example.com"
                 value={signInEmail}
                 onChange={this.onTextBoxChange}
+                required="true"
               />
             </label>
             <br />
@@ -222,6 +223,7 @@ class Account extends Component {
                 name="signInPassword"
                 value={signInPassword}
                 onChange={this.onTextBoxChange}
+                required="true"
               />
             </label>
             <br />
@@ -263,6 +265,7 @@ class Account extends Component {
                 placeholder="placeholder@example.com"
                 value={signUpEmail}
                 onChange={this.onTextBoxChange}
+                required="true"
               />
             </label>
             <br />
@@ -273,6 +276,7 @@ class Account extends Component {
                 name="signUpPassword"
                 value={signUpPassword}
                 onChange={this.onTextBoxChange}
+                required="true"
               />
             </label>
             <br />
@@ -283,6 +287,7 @@ class Account extends Component {
                 name="signUpConfirmPassword"
                 value={signUpConfirmPassword}
                 onChange={this.onTextBoxChange}
+                required="true"
               />
             </label>
             <br />

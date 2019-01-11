@@ -119,6 +119,7 @@ class Entry extends Component {
               name="entryValue"
               value={entryValue}
               onChange={this.onTextBoxChange}
+              required="true"
             />
             / {goal + ' ' + unit}
           </label>
