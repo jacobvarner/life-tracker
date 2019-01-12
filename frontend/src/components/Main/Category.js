@@ -47,7 +47,6 @@ class Category extends Component {
             isLoading: false
           });
         } else {
-          console.log(json.message);
           this.setState({
             isLoading: false,
             entries: null
@@ -97,7 +96,6 @@ class Category extends Component {
         let entry = {};
         if (date.getTime() === entryDates[0]) {
           entry = entries.shift();
-          console.log(entry);
           entryDates.shift();
           match = true;
         }
