@@ -105,12 +105,17 @@ module.exports = app => {
     let startDate = new Date(start);
     let endDate = new Date(end);
 
+    console.log(startDate);
+    console.log(endDate);
+    console.log(id);
+
     Entry.find(
       {
         categoryId: id,
-        date: { $gte: startDate, $lte: endDate },
-        sort: { date: 1 }
+        date: { $gte: startDate, $lte: endDate }
       },
+      null,
+      { sort: { date: 1 } },
       (err, entries) => {
         if (err) {
           return res.send({ success: false, message: 'Error: Server error.' });

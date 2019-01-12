@@ -73,6 +73,7 @@ class Entry extends Component {
             isFormOpen: false,
             isDetailOpen: false
           });
+          this.props.update();
         } else {
           this.setState({
             isLoading: false,

@@ -43,13 +43,14 @@ class Category extends Component {
       .then(json => {
         if (json.success) {
           this.setState({
-            entriesRaw: json.entries,
+            entries: json.entries,
             isLoading: false
           });
         } else {
+          console.log(json.message);
           this.setState({
             isLoading: false,
-            entriesRaw: null
+            entries: null
           });
         }
       });
@@ -67,9 +68,12 @@ class Category extends Component {
   }
 
   render() {
-    let dateArray = this.state.dateArray;
+    if (this.state.isLoading) {
+      return <p>Loading...</p>;
+    }
+    const { dateArray, entries } = this.state;
     let entriesArray;
-    if (this.state.entriesRaw === null) {
+    if (entries === null) {
       entriesArray = dateArray.map(date => {
         return (
           <Entry
@@ -82,14 +86,22 @@ class Category extends Component {
             description={''}
             title={''}
             complete={false}
+            update={this.getEntries}
           />
         );
       });
     } else {
+      let entryDates = entries.map(entry => new Date(entry.date).getTime());
       entriesArray = dateArray.map(date => {
-        let index = this.state.entries.indexOf(date);
-        if (index !== -1) {
-          let entry = this.state.entries[index];
+        let match = false;
+        let entry = {};
+        if (date.getTime() === entryDates[0]) {
+          entry = entries.shift();
+          console.log(entry);
+          entryDates.shift();
+          match = true;
+        }
+        if (match) {
           return (
             <Entry
               key={date}
@@ -101,6 +113,7 @@ class Category extends Component {
               description={entry.description}
               title={entry.title}
               complete={true}
+              update={this.getEntries}
             />
           );
         } else {
@@ -115,6 +128,7 @@ class Category extends Component {
               description={''}
               title={''}
               complete={false}
+              update={this.getEntries}
             />
           );
         }
