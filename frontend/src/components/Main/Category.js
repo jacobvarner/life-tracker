@@ -74,6 +74,7 @@ class Category extends Component {
         return (
           <Entry
             key={date}
+            categoryId={this.props.category._id}
             date={date}
             value={0}
             goal={this.props.category.goal}
@@ -92,6 +93,7 @@ class Category extends Component {
           return (
             <Entry
               key={date}
+              categoryId={this.props.category._id}
               date={date}
               value={entry.value}
               goal={this.props.category.goal}
@@ -105,6 +107,7 @@ class Category extends Component {
           return (
             <Entry
               key={date}
+              categoryId={this.props.category._id}
               date={date}
               value={0}
               goal={this.props.category.goal}

@@ -6,11 +6,14 @@ class Entry extends Component {
     super(props);
 
     this.state = {
+      isLoading: false,
       isFormOpen: false,
       isDetailOpen: false,
+      errorMessage: '',
       entryTitle: '',
       entryDescription: '',
-      entryValue: '',
+      entryValue: 0,
+      categoryId: this.props.categoryId,
       date: this.props.date,
       value: this.props.value,
       goal: this.props.goal,
@@ -35,8 +38,48 @@ class Entry extends Component {
   }
 
   submitEntry() {
-    // Will handle submitting new entry and editing existing entry
-    this.setState({ isFormOpen: false, isDetailOpen: false });
+    const {
+      entryTitle,
+      entryDescription,
+      entryValue,
+      date,
+      categoryId
+    } = this.state;
+
+    this.setState({ isLoading: true });
+
+    fetch('/api/entry/new', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: entryTitle,
+        description: entryDescription,
+        value: entryValue,
+        date: date,
+        categoryId: categoryId
+      })
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          this.setState({
+            entryTitle: '',
+            entryDescription: '',
+            entryValue: 0,
+            errorMessage: '',
+            isLoading: false,
+            isFormOpen: false,
+            isDetailOpen: false
+          });
+        } else {
+          this.setState({
+            isLoading: false,
+            errorMessage: json.message
+          });
+        }
+      });
   }
 
   onTextBoxChange(event) {
@@ -53,6 +96,7 @@ class Entry extends Component {
     const {
       isFormOpen,
       isDetailOpen,
+      errorMessage,
       entryTitle,
       entryDescription,
       entryValue,
@@ -89,6 +133,7 @@ class Entry extends Component {
     } else {
       return (
         <div>
+          {errorMessage ? <p>{errorMessage}</p> : null}
           <label>
             Entry Title
             <br />
@@ -119,9 +164,9 @@ class Entry extends Component {
               name="entryValue"
               value={entryValue}
               onChange={this.onTextBoxChange}
-              required="true"
+              required={true}
             />
-            / {goal + ' ' + unit}
+            /{goal + ' ' + unit}
           </label>
           <br />
           <button onClick={this.submitEntry}>Submit</button>

@@ -8,19 +8,22 @@ module.exports = app => {
     let { name, goal, unit, userId } = body;
 
     if (!name) {
-      res.send({ success: false, message: 'Error: Name cannot be blank.' });
+      return res.send({
+        success: false,
+        message: 'Error: Name cannot be blank.'
+      });
     } else if (!goal) {
-      res.send({
+      return res.send({
         success: false,
         message: 'Error: Each category must have a goal.'
       });
     } else if (!unit) {
-      res.send({
+      return res.send({
         success: false,
         message: 'Error: Each category must have a unit'
       });
     } else if (!userId) {
-      res.send({
+      return res.send({
         success: false,
         message: 'Error: A user must be attached to each category.'
       });
@@ -32,7 +35,7 @@ module.exports = app => {
     try {
       goal = parseInt(goal);
     } catch (err) {
-      res.send({
+      return res.send({
         success: false,
         message: 'Error: The goal must be a whole number.'
       });
@@ -40,19 +43,22 @@ module.exports = app => {
 
     User.findById(userId, (err, foundUser) => {
       if (err) {
-        res.send({ success: false, message: 'Error: Server error.' });
+        return res.send({ success: false, message: 'Error: Server error.' });
       }
       if (!foundUser) {
-        res.send({
+        return res.send({
           success: false,
           message: 'Error: Could not find this user.'
         });
       } else {
         Category.find({ name: name }, (err, foundCategory) => {
           if (err) {
-            res.send({ success: false, message: 'Error: Server error.' });
+            return res.send({
+              success: false,
+              message: 'Error: Server error.'
+            });
           } else if (foundCategory.length > 0) {
-            res.send({
+            return res.send({
               success: false,
               message: 'Error: That category already exists for that user.'
             });
@@ -64,9 +70,15 @@ module.exports = app => {
             newCategory.userId = userId;
             newCategory.save((err, category) => {
               if (err) {
-                res.send({ success: false, message: 'Error: Server error' });
+                return res.send({
+                  success: false,
+                  message: 'Error: Server error'
+                });
               } else {
-                res.send({ success: true, message: 'New category created.' });
+                return res.send({
+                  success: true,
+                  message: 'New category created.'
+                });
               }
             });
           }
@@ -86,15 +98,15 @@ module.exports = app => {
         { sort: { archived: 1, name: 1 } },
         (err, categories) => {
           if (err) {
-            res.send({ success: false, message: 'Error: Server error' });
+            return res.send({ success: false, message: 'Error: Server error' });
           }
           if (!categories.length > 0) {
-            res.send({
+            return res.send({
               success: false,
               message: 'Error: No categories found for this user.'
             });
           } else {
-            res.send({
+            return res.send({
               success: true,
               message: categories.length + ' categories found!',
               categories: categories
@@ -109,15 +121,15 @@ module.exports = app => {
         { sort: { archived: 1, name: 1 } },
         (err, categories) => {
           if (err) {
-            res.send({ success: false, message: 'Error: Server error' });
+            return res.send({ success: false, message: 'Error: Server error' });
           }
           if (!categories.length > 0) {
-            res.send({
+            return res.send({
               success: false,
               message: 'Error: No categories found for this user.'
             });
           } else {
-            res.send({
+            return res.send({
               success: true,
               message: categories.length + ' categories found!',
               categories: categories
