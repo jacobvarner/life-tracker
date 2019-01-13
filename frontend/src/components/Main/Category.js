@@ -14,6 +14,8 @@ class Category extends Component {
 
     this.getEntries = this.getEntries.bind(this);
     this.getDateArray = this.getDateArray.bind(this);
+    this.archiveCategory = this.archiveCategory.bind(this);
+    this.deleteCategory = this.deleteCategory.bind(this);
   }
 
   componentWillMount() {
@@ -65,6 +67,44 @@ class Category extends Component {
     }
     this.setState({ dateArray: dateArray });
   }
+
+  archiveCategory() {
+    let response = window.confirm(
+      'You are about to archive the category for ' +
+        this.props.category.name +
+        '.\nIs this okay?'
+    );
+    if (response) {
+      let archived = !this.props.category.archived;
+      this.setState({ isLoading: true });
+      fetch('/api/category/archive', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: this.props.category._id,
+          archived: archived
+        })
+      })
+        .then(res => res.json())
+        .then(json => {
+          if (json.success) {
+            this.setState(
+              {
+                isLoading: false
+              },
+              () => {
+                this.props.update();
+              }
+            );
+          }
+          this.setState({ isLoading: false });
+        });
+    }
+  }
+
+  deleteCategory() {}
 
   render() {
     if (this.state.isLoading) {
@@ -136,6 +176,11 @@ class Category extends Component {
     return (
       <section>
         <h2>{this.props.category.name}</h2>
+        <button onClick={this.archiveCategory}>
+          {this.props.category.archived ? 'Unarchive' : 'Archive'}
+        </button>
+        <button onClick={this.deleteCategory}>Delete</button>
+        <br />
         {entriesArray}
       </section>
     );

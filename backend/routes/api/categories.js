@@ -139,4 +139,25 @@ module.exports = app => {
       );
     }
   });
+
+  app.post('/api/category/archive', (req, res) => {
+    const { body } = req;
+    const { id, archived } = body;
+    Category.findByIdAndUpdate(
+      id,
+      { archived: archived },
+      { new: true },
+      (err, updated) => {
+        if (err) {
+          console.log(err);
+          return res.send({ success: false, message: 'Error: Server error.' });
+        } else {
+          return res.send({
+            success: true,
+            message: 'Category has been updated!'
+          });
+        }
+      }
+    );
+  });
 };

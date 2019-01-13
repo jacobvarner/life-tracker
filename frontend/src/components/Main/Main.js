@@ -76,7 +76,10 @@ class Main extends Component {
         <div>
           <h1>{view}</h1>
           {this.state.categories && (
-            <CategoriesContainer categories={this.state.categories} />
+            <CategoriesContainer
+              categories={this.state.categories}
+              update={this.updateCategories}
+            />
           )}
           {this.state.categories && (
             <ShowArchived

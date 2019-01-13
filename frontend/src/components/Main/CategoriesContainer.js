@@ -76,6 +76,7 @@ class CategoriesContainer extends Component {
           category={category}
           startDate={this.state.startDate}
           endDate={this.state.endDate}
+          update={this.props.update}
         />
       );
     });
