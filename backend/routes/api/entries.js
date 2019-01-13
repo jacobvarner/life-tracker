@@ -17,9 +17,6 @@ module.exports = app => {
 
     value = parseInt(value);
 
-    console.log('Value: ' + value);
-    console.log('typeof Value: ' + typeof value);
-
     if (!value) {
       return res.send({
         success: false,
@@ -104,10 +101,6 @@ module.exports = app => {
 
     let startDate = new Date(start);
     let endDate = new Date(end);
-
-    console.log(startDate);
-    console.log(endDate);
-    console.log(id);
 
     Entry.find(
       {

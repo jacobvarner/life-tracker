@@ -17,6 +17,7 @@ class NewCategory extends Component {
     this.onTextBoxChange = this.onTextBoxChange.bind(this);
     this.onSubmitNewCategory = this.onSubmitNewCategory.bind(this);
     this.openNewCategoryForm = this.openNewCategoryForm.bind(this);
+    this.closeNewCategoryForm = this.closeNewCategoryForm.bind(this);
   }
 
   onTextBoxChange(event) {
@@ -72,6 +73,12 @@ class NewCategory extends Component {
     });
   }
 
+  closeNewCategoryForm() {
+    this.setState({
+      isFormOpen: false
+    });
+  }
+
   render() {
     const {
       isFormOpen,
@@ -85,6 +92,7 @@ class NewCategory extends Component {
     } else {
       return (
         <div>
+          <button onClick={this.closeNewCategoryForm}>Close</button>
           <p>New Category</p>
           {newCategoryError ? <p>{newCategoryError}</p> : null}
           <label>
