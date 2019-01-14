@@ -98,8 +98,9 @@ class Category extends Component {
                 this.props.update();
               }
             );
+          } else {
+            this.setState({ isLoading: false });
           }
-          this.setState({ isLoading: false });
         });
     }
   }

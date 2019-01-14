@@ -19,8 +19,14 @@ class Main extends Component {
     this.updateCategories = this.updateCategories.bind(this);
   }
 
+  abortController = new window.AbortController();
+
   componentDidMount() {
     this.updateCategories();
+  }
+
+  componentWillUnmount() {
+    this.abortController.abort();
   }
 
   updateCategories() {
@@ -35,7 +41,10 @@ class Main extends Component {
       query = '';
     }
 
-    fetch('/api/category?userId=' + userId + query)
+    fetch('/api/category?userId=' + userId + query, {
+      method: 'GET',
+      signal: this.abortController.signal
+    })
       .then(res => res.json())
       .then(json => {
         if (json.success) {
@@ -81,7 +90,7 @@ class Main extends Component {
               update={this.updateCategories}
             />
           )}
-          {this.state.categories && (
+          {!this.state.isLoading && (
             <ShowArchived
               archived={this.state.showArchived}
               updateShowArchived={this.updateShowArchived}
