@@ -134,4 +134,19 @@ module.exports = app => {
       }
     );
   });
+
+  app.delete('/api/entry/delete', (req, res) => {
+    const { body } = req;
+    const { id } = body;
+    Entry.findByIdAndDelete(id, err => {
+      if (err) {
+        return res.send({ success: false, message: 'Error: Server error.' });
+      } else {
+        return res.send({
+          success: true,
+          message: 'Entry ' + id + ' deleted!'
+        });
+      }
+    });
+  });
 };

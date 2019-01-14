@@ -27,6 +27,7 @@ class Entry extends Component {
     this.openEntryForm = this.openEntryForm.bind(this);
     this.submitEntry = this.submitEntry.bind(this);
     this.onTextBoxChange = this.onTextBoxChange.bind(this);
+    this.deleteEntry = this.deleteEntry.bind(this);
   }
 
   openEntryDetail() {
@@ -35,6 +36,32 @@ class Entry extends Component {
 
   openEntryForm() {
     this.setState({ isFormOpen: true, isDetailOpen: true });
+  }
+
+  deleteEntry() {
+    let response = window.confirm(
+      'Are you sure you want to delete this entry? This cannot be undone.'
+    );
+    if (response) {
+      this.setState({ isLoading: true });
+      fetch('/api/entry/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: this.props.id
+        })
+      })
+        .then(res => res.json())
+        .then(json => {
+          if (json.success) {
+            this.setState({ isLoading: false }, () => this.props.update());
+          } else {
+            this.setState({ isLoading: false });
+          }
+        });
+    }
   }
 
   submitEntry() {
@@ -129,6 +156,7 @@ class Entry extends Component {
           <p>{description}</p>
           <p>{value + '/' + goal + ' ' + unit}</p>
           <button onClick={this.openEntryForm}>Edit</button>
+          <button onClick={this.deleteEntry}>Delete</button>
         </div>
       );
     } else {

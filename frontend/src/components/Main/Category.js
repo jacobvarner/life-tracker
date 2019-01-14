@@ -146,6 +146,7 @@ class Category extends Component {
             key={date}
             categoryId={this.props.category._id}
             date={date}
+            id={null}
             value={0}
             goal={this.props.category.goal}
             unit={this.props.category.unit}
@@ -172,6 +173,7 @@ class Category extends Component {
               key={date}
               categoryId={this.props.category._id}
               date={date}
+              id={entry._id}
               value={entry.value}
               goal={this.props.category.goal}
               unit={this.props.category.unit}
@@ -187,6 +189,7 @@ class Category extends Component {
               key={date}
               categoryId={this.props.category._id}
               date={date}
+              id={null}
               value={0}
               goal={this.props.category.goal}
               unit={this.props.category.unit}
