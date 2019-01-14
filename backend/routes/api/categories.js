@@ -160,4 +160,19 @@ module.exports = app => {
       }
     );
   });
+
+  app.delete('/api/category/delete', (req, res) => {
+    const { body } = req;
+    const { id } = body;
+    Category.findByIdAndDelete(id, err => {
+      if (err) {
+        return res.send({ success: false, message: 'Error: Server error.' });
+      } else {
+        return res.send({
+          success: true,
+          message: 'Category ' + id + ' deleted!'
+        });
+      }
+    });
+  });
 };

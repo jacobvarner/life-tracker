@@ -105,7 +105,33 @@ class Category extends Component {
     }
   }
 
-  deleteCategory() {}
+  deleteCategory() {
+    let response = window.confirm(
+      'You are about to delete the category for ' +
+        this.props.category.name +
+        '.\nTHIS IS NOT REVERSIBLE! Are you sure?'
+    );
+    if (response) {
+      this.setState({ isLoading: true });
+      fetch('/api/category/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: this.props.category._id
+        })
+      })
+        .then(res => res.json())
+        .then(json => {
+          if (json.success) {
+            this.setState({ isLoading: false }, () => this.props.update());
+          } else {
+            this.setState({ isLoading: false });
+          }
+        });
+    }
+  }
 
   render() {
     if (this.state.isLoading) {
