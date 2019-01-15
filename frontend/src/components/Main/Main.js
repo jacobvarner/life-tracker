@@ -81,23 +81,39 @@ class Main extends Component {
         </div>
       );
     } else {
-      return (
-        <div>
-          <h1>{view}</h1>
-          {this.state.categories && (
-            <CategoriesContainer
-              categories={this.state.categories}
-              update={this.updateCategories}
-            />
-          )}
-          {!this.state.isLoading && (
-            <ShowArchived
-              archived={this.state.showArchived}
-              updateShowArchived={this.updateShowArchived}
-            />
-          )}
-        </div>
-      );
+      if (view === 'Home') {
+        return (
+          <div>
+            <h1>{view}</h1>
+            <p>This is the home page.</p>
+          </div>
+        );
+      } else if (view === 'Main') {
+        return (
+          <div>
+            <h1>{view}</h1>
+            {this.state.categories && (
+              <CategoriesContainer
+                categories={this.state.categories}
+                update={this.updateCategories}
+              />
+            )}
+            {!this.state.isLoading && (
+              <ShowArchived
+                archived={this.state.showArchived}
+                updateShowArchived={this.updateShowArchived}
+              />
+            )}
+          </div>
+        );
+      } else if (view === 'Log') {
+        return (
+          <div>
+            <h1>{view}</h1>
+            <p>This is the log view.</p>
+          </div>
+        );
+      }
     }
   }
 }
