@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import CategoriesContainer from './CategoriesContainer';
+import MainCategoriesContainer from './MainCategoriesContainer';
+import LogCategoriesContainer from './LogCategoriesContainer';
 import ShowArchived from './ShowArchived';
 
 import 'whatwg-fetch';
@@ -93,7 +94,7 @@ class Main extends Component {
           <div>
             <h1>{view}</h1>
             {this.state.categories && (
-              <CategoriesContainer
+              <MainCategoriesContainer
                 categories={this.state.categories}
                 update={this.updateCategories}
               />
@@ -110,7 +111,18 @@ class Main extends Component {
         return (
           <div>
             <h1>{view}</h1>
-            <p>This is the log view.</p>
+            {this.state.categories && (
+              <LogCategoriesContainer
+                categories={this.state.categories}
+                update={this.updateCategories}
+              />
+            )}
+            {!this.state.isLoading && (
+              <ShowArchived
+                archived={this.state.showArchived}
+                updateShowArchived={this.updateShowArchived}
+              />
+            )}
           </div>
         );
       }
