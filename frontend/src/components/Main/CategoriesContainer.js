@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Category from './Category';
 
-class MainCategoriesContainer extends Component {
+class CategoriesContainer extends Component {
   constructor(props) {
     super(props);
 
@@ -97,4 +97,4 @@ class MainCategoriesContainer extends Component {
   }
 }
 
-export default MainCategoriesContainer;
+export default CategoriesContainer;

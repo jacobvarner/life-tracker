@@ -149,4 +149,32 @@ module.exports = app => {
       }
     });
   });
+
+  app.get('/api/entry/log', (req, res) => {
+    const { query } = req;
+    const { categoryId, page } = query;
+    let skip = page * 10;
+    Entry.find(
+      { categoryId: categoryId },
+      null,
+      { sort: { date: 1 }, limit: 10, skip: skip },
+      (err, entries) => {
+        if (err) {
+          return res.send({ success: false, message: 'Error: Server error.' });
+        }
+        if (!entries.length > 0) {
+          return res.send({
+            success: false,
+            message: 'Error: Could not find any entries'
+          });
+        } else {
+          return res.send({
+            success: true,
+            message: 'Entries found!',
+            entries: entries
+          });
+        }
+      }
+    );
+  });
 };

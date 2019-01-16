@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import LogCategoriesSwitcher from './LogCategoriesSwitcher';
+import LogCategory from './LogCategory';
 
 class LogCategoriesContainer extends Component {
   constructor(props) {
@@ -11,6 +12,10 @@ class LogCategoriesContainer extends Component {
     };
 
     this.updateCategory = this.updateCategory.bind(this);
+  }
+
+  componentDidMount() {
+    this.updateCategory(this.props.categories[0]);
   }
 
   updateCategory(category) {
@@ -27,7 +32,7 @@ class LogCategoriesContainer extends Component {
           updateCategory={this.updateCategory}
           currentCategory={this.state.currentCategory}
         />
-        <p>Current Category: {this.state.currentCategory}</p>
+        <LogCategory category={this.state.currentCategory} />
       </div>
     );
   }

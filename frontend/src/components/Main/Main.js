@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import MainCategoriesContainer from './MainCategoriesContainer';
+import CategoriesContainer from './CategoriesContainer';
 import LogCategoriesContainer from './LogCategoriesContainer';
 import ShowArchived from './ShowArchived';
 
@@ -94,7 +94,7 @@ class Main extends Component {
           <div>
             <h1>{view}</h1>
             {this.state.categories && (
-              <MainCategoriesContainer
+              <CategoriesContainer
                 categories={this.state.categories}
                 update={this.updateCategories}
               />

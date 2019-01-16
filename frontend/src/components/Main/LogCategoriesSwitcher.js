@@ -12,8 +12,8 @@ class LogCategoriesSwitcher extends Component {
     let listCategories = categories.map(category => {
       return (
         <button
-          disabled={category.name === this.props.currentCategory}
-          onClick={() => this.props.updateCategory(category.name)}
+          disabled={category.name === this.props.currentCategory.name}
+          onClick={() => this.props.updateCategory(category)}
           key={category.name}
         >
           {category.name}
