@@ -14,7 +14,7 @@ class LogCategoriesContainer extends Component {
     this.updateCategory = this.updateCategory.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.updateCategory(this.props.categories[0]);
   }
 

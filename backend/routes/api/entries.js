@@ -153,7 +153,7 @@ module.exports = app => {
   app.get('/api/entry/log', (req, res) => {
     const { query } = req;
     const { categoryId, page } = query;
-    let skip = page * 10;
+    let skip = parseInt(page) * 10;
     Entry.find(
       { categoryId: categoryId },
       null,
