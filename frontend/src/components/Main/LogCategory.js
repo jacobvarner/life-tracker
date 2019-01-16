@@ -13,6 +13,8 @@ class LogCategory extends Component {
     };
 
     this.getEntries = this.getEntries.bind(this);
+    this.loadPreviousEntries = this.loadPreviousEntries.bind(this);
+    this.loadNextEntries = this.loadNextEntries.bind(this);
   }
 
   componentWillMount() {
@@ -52,7 +54,8 @@ class LogCategory extends Component {
                 if (json.success) {
                   this.setState({
                     isLoading: false,
-                    entries: entries
+                    entries: entries,
+                    lastPage: false
                   });
                 } else {
                   this.setState({
@@ -72,6 +75,24 @@ class LogCategory extends Component {
       });
   }
 
+  loadNextEntries() {
+    this.setState(
+      {
+        page: this.state.page + 1
+      },
+      () => this.getEntries()
+    );
+  }
+
+  loadPreviousEntries() {
+    this.setState(
+      {
+        page: this.state.page - 1
+      },
+      () => this.getEntries()
+    );
+  }
+
   render() {
     if (this.state.isLoading) {
       return <p>Loading...</p>;
@@ -83,7 +104,18 @@ class LogCategory extends Component {
     let entryComponents = entries.map(entry => {
       return <LogEntry entry={entry} key={entry._id} />;
     });
-    return <div>{entryComponents}</div>;
+    return (
+      <div>
+        <h2>{this.props.category.name}</h2>
+        {entryComponents}
+        {this.state.page !== 0 ? (
+          <button onClick={this.loadPreviousEntries}>Show Previous</button>
+        ) : null}
+        {!this.state.lastPage ? (
+          <button onClick={this.loadNextEntries}>Show Next</button>
+        ) : null}
+      </div>
+    );
   }
 }
 
