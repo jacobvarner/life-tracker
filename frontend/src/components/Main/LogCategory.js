@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LogEntry from './LogEntry';
 
 class LogCategory extends Component {
   constructor(props) {
@@ -18,6 +19,15 @@ class LogCategory extends Component {
     this.getEntries();
   }
 
+  componentDidUpdate(prevProps) {
+    if (
+      JSON.stringify(this.props.category.name) !==
+      JSON.stringify(prevProps.category.name)
+    ) {
+      this.getEntries();
+    }
+  }
+
   getEntries() {
     let id = this.props.category._id;
     this.setState({ isLoading: true });
@@ -25,20 +35,13 @@ class LogCategory extends Component {
       .then(res => res.json())
       .then(json => {
         if (json.success) {
-          if (json.entries.length < 10) {
-            if (this.state.entries === '') {
-              this.setState({
-                isLoading: false,
-                entries: json.entries,
-                lastPage: true
-              });
-            } else {
-              this.setState({
-                isLoading: false,
-                entries: this.state.entries.concat(json.entries),
-                lastPage: true
-              });
-            }
+          let entries = json.entries;
+          if (entries.length < 10) {
+            this.setState({
+              isLoading: false,
+              entries: entries,
+              lastPage: true
+            });
           } else {
             // If an even 10 entries, make sure there is at least one more
             fetch(
@@ -47,48 +50,40 @@ class LogCategory extends Component {
               .then(res => res.json())
               .then(json => {
                 if (json.success) {
-                  if (this.state.entries === '') {
-                    this.setState({
-                      isLoading: false,
-                      entries: json.entries
-                    });
-                  } else {
-                    this.setState({
-                      isLoading: false,
-                      entries: this.state.entries.concat(json.entries)
-                    });
-                  }
+                  this.setState({
+                    isLoading: false,
+                    entries: entries
+                  });
                 } else {
-                  if (this.state.entries === '') {
-                    this.setState({
-                      isLoading: false,
-                      entries: json.entries,
-                      lastPage: true
-                    });
-                  } else {
-                    this.setState({
-                      isLoading: false,
-                      entries: this.state.entries.concat(json.entries),
-                      lastPage: true
-                    });
-                  }
+                  this.setState({
+                    isLoading: false,
+                    entries: entries,
+                    lastPage: true
+                  });
                 }
               });
           }
         } else {
           this.setState({
-            isLoading: false
+            isLoading: false,
+            entries: ''
           });
         }
       });
   }
 
   render() {
-    return (
-      <div>
-        <p>Test</p>
-      </div>
-    );
+    if (this.state.isLoading) {
+      return <p>Loading...</p>;
+    }
+    let entries = this.state.entries;
+    if (entries === '') {
+      return <p>No Entries</p>;
+    }
+    let entryComponents = entries.map(entry => {
+      return <LogEntry entry={entry} key={entry._id} />;
+    });
+    return <div>{entryComponents}</div>;
   }
 }
 
