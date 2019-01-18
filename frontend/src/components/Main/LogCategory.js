@@ -102,7 +102,14 @@ class LogCategory extends Component {
       return <p>No Entries</p>;
     }
     let entryComponents = entries.map(entry => {
-      return <LogEntry entry={entry} key={entry._id} />;
+      return (
+        <LogEntry
+          entry={entry}
+          key={entry._id}
+          category={this.props.category}
+          update={this.getEntries}
+        />
+      );
     });
     return (
       <div>
