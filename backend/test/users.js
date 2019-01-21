@@ -19,5 +19,70 @@ describe('Users', () => {
         done();
       });
     });
+
+    it('Creates a new user without name fields complete', done => {
+      const newUser2 = new User({
+        email: 'test2@test.com',
+        password: '123456789'
+      });
+      newUser2.save().then(() => {
+        assert(!newUser2.isNew);
+        done();
+      });
+    });
+
+    it('Throws error for missing email', done => {
+      const missingEmail = new User({
+        firstName: 'Jacob',
+        lastName: 'Varner',
+        password: '123456789'
+      });
+      missingEmail.save(err => {
+        if (err) {
+          return done();
+        }
+        throw new Error('Should generate error for missing email.');
+      });
+    });
+
+    it('Throws error for missing password', done => {
+      const missingPassword = new User({
+        firstName: 'Jacob',
+        lastName: 'Varner',
+        email: 'test3@test.com'
+      });
+      missingPassword.save(err => {
+        if (err) {
+          return done();
+        }
+        throw new Error('Should generate error for missing password.');
+      });
+    });
+
+    it('Throws error for duplicate email', done => {
+      const duplicateUser = new User({
+        email: 'test2@test.com',
+        password: '123456789'
+      });
+      duplicateUser.save(err => {
+        if (err) {
+          return done();
+        }
+        throw new Error('Should generate error for duplicate emails.');
+      });
+    });
+
+    it('Throws error for invalid email', done => {
+      const invalidEmail = new User({
+        email: 'test2@2',
+        password: '123456789'
+      });
+      invalidEmail.save(err => {
+        if (err) {
+          return done();
+        }
+        throw new Error('Should generate error for invalid emails.');
+      });
+    });
   });
 });
