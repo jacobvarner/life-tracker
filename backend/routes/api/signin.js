@@ -29,19 +29,23 @@ module.exports = app => {
     email = email.toLowerCase();
     email = email.trim();
 
-    firstName = firstName
-      .toLowerCase()
-      .trim()
-      .split('');
-    firstName[0] = firstName[0].toUpperCase();
-    firstName = firstName.join('');
+    if (firstName) {
+      firstName = firstName
+        .toLowerCase()
+        .trim()
+        .split('');
+      firstName[0] = firstName[0].toUpperCase();
+      firstName = firstName.join('');
+    }
 
-    lastName = lastName
-      .toLowerCase()
-      .trim()
-      .split('');
-    lastName[0] = lastName[0].toUpperCase();
-    lastName = lastName.join('');
+    if (lastName) {
+      lastName = lastName
+        .toLowerCase()
+        .trim()
+        .split('');
+      lastName[0] = lastName[0].toUpperCase();
+      lastName = lastName.join('');
+    }
 
     // Verify email address has not been used
     User.find({ email: email }, (err, previousUsers) => {
@@ -84,13 +88,13 @@ module.exports = app => {
     if (!email) {
       return res.send({
         success: false,
-        message: 'Error: Email cannot be blank.'
+        message: 'Error: Email cannot be blank'
       });
     }
     if (!password) {
       return res.send({
         success: false,
-        message: 'Error: Password cannot be blank.'
+        message: 'Error: Password cannot be blank'
       });
     }
     email = email.toLowerCase();
@@ -109,7 +113,7 @@ module.exports = app => {
         if (users.length != 1) {
           return res.send({
             success: false,
-            message: 'Error: Invalid'
+            message: 'Error: No user found with that email address'
           });
         }
         const user = users[0];
@@ -117,7 +121,7 @@ module.exports = app => {
         if (!user.validPassword(password)) {
           return res.send({
             success: false,
-            message: 'Error: Invalid'
+            message: 'Error: Incorrect password'
           });
         }
         // Otherwise correct user
