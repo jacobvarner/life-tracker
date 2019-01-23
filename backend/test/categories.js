@@ -36,5 +36,81 @@ describe('Categories', () => {
         done();
       });
     });
+
+    it('Should throw error for missing name', done => {
+      const newCategory = new Category({
+        goal: 3,
+        unit: 'Tests',
+        userId: userId
+      });
+
+      newCategory.save(err => {
+        if (err) {
+          return done();
+        }
+        throw new Error('Should generate error for missing name');
+      });
+    });
+
+    it('Should throw error for missing goal', done => {
+      const newCategory = new Category({
+        name: 'Test2',
+        unit: 'Tests',
+        userId: userId
+      });
+
+      newCategory.save(err => {
+        if (err) {
+          return done();
+        }
+        throw new Error('Should generate error for missing goal');
+      });
+    });
+
+    it('Should throw error for invalid goal', done => {
+      const newCategory = new Category({
+        name: 'Test3',
+        goal: 'test',
+        unit: 'Tests',
+        userId: userId
+      });
+
+      newCategory.save(err => {
+        if (err) {
+          return done();
+        }
+        throw new Error('Should generate error for invalid goal');
+      });
+    });
+
+    it('Should throw error for missing unit', done => {
+      const newCategory = new Category({
+        name: 'Test4',
+        goal: 3,
+        userId: userId
+      });
+
+      newCategory.save(err => {
+        if (err) {
+          return done();
+        }
+        throw new Error('Should generate error for missing unit');
+      });
+    });
+
+    it('Should throw error for missing userId', done => {
+      const newCategory = new Category({
+        name: 'Test4',
+        goal: 3,
+        unit: 'Tests'
+      });
+
+      newCategory.save(err => {
+        if (err) {
+          return done();
+        }
+        throw new Error('Should generate error for missing userId');
+      });
+    });
   });
 });
