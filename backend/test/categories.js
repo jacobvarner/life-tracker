@@ -113,4 +113,172 @@ describe('Categories', () => {
       });
     });
   });
+
+  describe('Creating a new category through the API', () => {
+    it('Create a new category with all fields complete', done => {
+      const body = {
+        name: 'New Category',
+        goal: 3,
+        unit: 'Test',
+        userId: userId
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.equal(body.message, 'New category created.');
+          done();
+        });
+    });
+
+    it('Throws error for name field being blank', done => {
+      const body = {
+        name: '',
+        goal: 3,
+        unit: 'Test',
+        userId: userId
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Name cannot be blank.');
+          done();
+        });
+    });
+
+    it('Throws error for goal field being blank', done => {
+      const body = {
+        name: 'New Category 2',
+        goal: 0,
+        unit: 'Test',
+        userId: userId
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Each category must have a goal.');
+          done();
+        });
+    });
+
+    it('Throws error for unit field being blank', done => {
+      const body = {
+        name: 'New Category 3',
+        goal: 3,
+        unit: '',
+        userId: userId
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Each category must have a unit.');
+          done();
+        });
+    });
+
+    it('Throws error for userId field being blank', done => {
+      const body = {
+        name: 'New Category 4',
+        goal: 3,
+        unit: 'Test',
+        userId: ''
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(
+            body.message,
+            'Error: A user must be attached to each category.'
+          );
+          done();
+        });
+    });
+
+    it('Throws error for goal not being a whole number', done => {
+      const body = {
+        name: 'New Category 5',
+        goal: 'test',
+        unit: 'Test',
+        userId: userId
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: The goal must be a whole number.');
+          done();
+        });
+    });
+
+    it('Throws error for a user that does not exist', done => {
+      const body = {
+        name: 'New Category 6',
+        goal: 3,
+        unit: 'Test',
+        userId: '5c4a4c7c30cbd465bcf5a600'
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Could not find this user.');
+          done();
+        });
+    });
+
+    it('Throws error for a duplicate category', done => {
+      const body = {
+        name: 'New Category',
+        goal: 3,
+        unit: 'Test',
+        userId: userId
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(
+            body.message,
+            'Error: That category already exists for that user.'
+          );
+          done();
+        });
+    });
+  });
 });

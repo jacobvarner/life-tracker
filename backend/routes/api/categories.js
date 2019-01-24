@@ -20,7 +20,7 @@ module.exports = app => {
     } else if (!unit) {
       return res.send({
         success: false,
-        message: 'Error: Each category must have a unit'
+        message: 'Error: Each category must have a unit.'
       });
     } else if (!userId) {
       return res.send({
@@ -32,9 +32,9 @@ module.exports = app => {
     name = name.trim();
     unit = unit.trim();
 
-    try {
-      goal = parseInt(goal);
-    } catch (err) {
+    goal = parseInt(goal);
+
+    if (!goal) {
       return res.send({
         success: false,
         message: 'Error: The goal must be a whole number.'
