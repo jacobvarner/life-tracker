@@ -281,4 +281,45 @@ describe('Categories', () => {
         });
     });
   });
+
+  describe('Get categories from the API', () => {
+    it('Gets all unarchived categories for a valid user', done => {
+      chai
+        .request(server)
+        .get('/api/category?userId=' + userId + '&archived=false')
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.exists(body.categories);
+          done();
+        });
+    });
+
+    it('Gets all categories for a valid user', done => {
+      chai
+        .request(server)
+        .get('/api/category?userId=' + userId)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.exists(body.categories);
+          done();
+        });
+    });
+
+    it('Should return error for no categories found for a user that does not exist', done => {
+      chai
+        .request(server)
+        .get('/api/category?userId=5c4a4c7c30cbd465bcf5a600')
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(
+            body.message,
+            'Error: No categories found for this user.'
+          );
+          done();
+        });
+    });
+  });
 });
