@@ -6,6 +6,7 @@ chai.use(chaiHttp);
 const assert = chai.assert;
 const server = require('./test_helper');
 let userId;
+let categoryId;
 
 describe('Categories', () => {
   before(done => {
@@ -18,7 +19,18 @@ describe('Categories', () => {
 
     testUser.save((err, user) => {
       userId = user._id;
-      done();
+
+      const testCategory = new Category({
+        name: 'Code',
+        goal: 2,
+        unit: 'Hours',
+        userId: userId
+      });
+
+      testCategory.save((err, category) => {
+        categoryId = category._id;
+        done();
+      });
     });
   });
 
@@ -318,6 +330,96 @@ describe('Categories', () => {
             body.message,
             'Error: No categories found for this user.'
           );
+          done();
+        });
+    });
+  });
+
+  describe('Archive and delete categories from the API', () => {
+    it('Sets a category to archived', done => {
+      const body = {
+        id: categoryId,
+        archived: true
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/archive')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.equal(body.message, 'Category has been updated!');
+          done();
+        });
+    });
+
+    it('Sets a category to unarchived', done => {
+      const body = {
+        id: categoryId,
+        archived: false
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/archive')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.equal(body.message, 'Category has been updated!');
+          done();
+        });
+    });
+
+    it('Should return error for updating a category that does not exist', done => {
+      const body = {
+        id: '2',
+        archived: true
+      };
+
+      chai
+        .request(server)
+        .post('/api/category/archive')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Server error.');
+          done();
+        });
+    });
+
+    it('Deletes a category', done => {
+      const body = {
+        id: categoryId
+      };
+
+      chai
+        .request(server)
+        .delete('/api/category/delete')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.equal(body.message, 'Category ' + categoryId + ' deleted!');
+          done();
+        });
+    });
+
+    it('Should return error for deleting a category that does not exist', done => {
+      const body = {
+        id: '2'
+      };
+
+      chai
+        .request(server)
+        .delete('/api/category/delete')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Server error.');
           done();
         });
     });

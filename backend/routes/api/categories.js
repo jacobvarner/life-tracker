@@ -149,7 +149,6 @@ module.exports = app => {
       { new: true },
       (err, updated) => {
         if (err) {
-          console.log(err);
           return res.send({ success: false, message: 'Error: Server error.' });
         } else {
           return res.send({
