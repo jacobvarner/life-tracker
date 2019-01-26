@@ -26,7 +26,7 @@ module.exports = app => {
 
     if (Object.prototype.toString.call(date) === '[object Date]') {
       if (isNaN(date.getTime())) {
-        return res.send({ success: false, message: 'Error: Date is invalid' });
+        return res.send({ success: false, message: 'Error: Date is invalid.' });
       }
       return res.send({ success: false, message: 'Error: Date is invalid.' });
     }
@@ -58,7 +58,6 @@ module.exports = app => {
                     message: 'Error: Server error'
                   });
                 } else {
-                  console.log('Editing entry ' + entry[0]._id);
                   return res.send({
                     success: true,
                     message: 'Entry successfully updated.',
@@ -68,7 +67,6 @@ module.exports = app => {
               }
             );
           } else {
-            console.log('Creating new entry!');
             const newEntry = new Entry();
             newEntry.title = title;
             newEntry.description = description;

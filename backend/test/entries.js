@@ -9,6 +9,7 @@ const server = require('./test_helper');
 let userId;
 let categoryId;
 let entryId;
+let testDate;
 
 describe('Entries', () => {
   before(done => {
@@ -32,15 +33,13 @@ describe('Entries', () => {
       testCategory.save((err, category) => {
         categoryId = category._id;
 
-        let date = new Date();
-        date = date.toLocaleDateString();
-        date = new Date(date);
+        testDate = new Date(new Date().toLocaleDateString());
 
         const testEntry = new Entry({
           title: 'Test Title',
           description: 'Test description',
           value: 2,
-          date: date,
+          date: testDate,
           categoryId: categoryId
         });
 
@@ -161,6 +160,136 @@ describe('Entries', () => {
         }
         throw new Error('Should generate error for invalid value');
       });
+    });
+  });
+
+  describe('Create a new entry through the API', () => {
+    it('Creates an entry with all fields complete', done => {
+      const body = {
+        title: 'Test Title',
+        description: 'Test description',
+        value: 2,
+        date: new Date('2010-6-6'),
+        categoryId: categoryId
+      };
+
+      chai
+        .request(server)
+        .post('/api/entry/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.equal(body.message, 'New entry created.');
+          done();
+        });
+    });
+
+    it('Creates an entry with all required fields complete', done => {
+      const body = {
+        value: 2,
+        date: new Date('2010-6-7'),
+        categoryId: categoryId
+      };
+
+      chai
+        .request(server)
+        .post('/api/entry/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.equal(body.message, 'New entry created.');
+          assert.equal(body.entry.title, 'No Title');
+          assert.equal(body.entry.description, 'No Description');
+          done();
+        });
+    });
+    it('Throws error for invalid value', done => {
+      const body = {
+        title: 'Test Title',
+        description: 'Test description',
+        value: 'test',
+        date: new Date('2010-6-8'),
+        categoryId: categoryId
+      };
+
+      chai
+        .request(server)
+        .post('/api/entry/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(
+            body.message,
+            'Error: The entry must have a whole, positive number value.'
+          );
+          done();
+        });
+    });
+
+    it('Throws error for invalid date', done => {
+      const body = {
+        title: 'Test Title',
+        description: 'Test description',
+        value: 2,
+        date: 'test',
+        categoryId: categoryId
+      };
+
+      chai
+        .request(server)
+        .post('/api/entry/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Server error.');
+          done();
+        });
+    });
+
+    it('Throws error for invalid category', done => {
+      const body = {
+        title: 'Test Title',
+        description: 'Test description',
+        value: 2,
+        date: new Date('2010-6-9'),
+        categoryId: '5c4a4c7c30cbd465bcf5a600'
+      };
+
+      chai
+        .request(server)
+        .post('/api/entry/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Could not find category.');
+          done();
+        });
+    });
+
+    it('Updates an entry', done => {
+      const body = {
+        title: 'Test Title',
+        description: 'Test description',
+        value: 2,
+        date: new Date('2010-6-6'),
+        categoryId: categoryId
+      };
+
+      chai
+        .request(server)
+        .post('/api/entry/new')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.equal(body.message, 'Entry successfully updated.');
+          done();
+        });
     });
   });
 });
