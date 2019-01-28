@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import { Link } from 'react-router-dom';
 import Account from './Account';
 import NewCategory from './NewCategory';
 import ViewSwitcher from './ViewSwitcher';
@@ -15,8 +14,7 @@ class Header extends Component {
   render() {
     return (
       <header>
-        <Link to="/">Home</Link>
-
+        <h1>Life Tracker</h1>
         <nav />
 
         {this.props.currentUser && (
