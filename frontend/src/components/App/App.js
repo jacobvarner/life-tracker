@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Main from '../Main/Main';
+import HomeContainer from '../Home/HomeContainer';
 
 import 'whatwg-fetch';
 import { getFromStorage } from '../../utils/storage';
@@ -38,13 +39,15 @@ class App extends Component {
             });
           } else {
             this.setState({
-              isLoading: false
+              isLoading: false,
+              view: 'Home'
             });
           }
         });
     } else {
       this.setState({
-        isLoading: false
+        isLoading: false,
+        view: 'Home'
       });
     }
   }
@@ -58,21 +61,37 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <Header
-          updateTokenAndUser={this.updateTokenAndUser}
-          currentUser={this.state.currentUser}
-          token={this.state.token}
-          updateView={this.updateView}
-          view={this.state.view}
-        />
-        {this.state.currentUser && (
-          <Main currentUser={this.state.currentUser} view={this.state.view} />
-        )}
-        <Footer />
-      </div>
-    );
+    if (this.state.view === 'Home') {
+      return (
+        <div>
+          <Header
+            updateTokenAndUser={this.updateTokenAndUser}
+            currentUser={this.state.currentUser}
+            token={this.state.token}
+            updateView={this.updateView}
+            view={this.state.view}
+          />
+          <HomeContainer />
+          <Footer />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Header
+            updateTokenAndUser={this.updateTokenAndUser}
+            currentUser={this.state.currentUser}
+            token={this.state.token}
+            updateView={this.updateView}
+            view={this.state.view}
+          />
+          {this.state.currentUser && (
+            <Main currentUser={this.state.currentUser} view={this.state.view} />
+          )}
+          <Footer />
+        </div>
+      );
+    }
   }
 }
 

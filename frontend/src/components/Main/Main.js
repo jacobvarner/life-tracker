@@ -82,14 +82,7 @@ class Main extends Component {
         </div>
       );
     } else {
-      if (view === 'Home') {
-        return (
-          <div>
-            <h1>{view}</h1>
-            <p>This is the home page.</p>
-          </div>
-        );
-      } else if (view === 'Main') {
+      if (view === 'Main') {
         return (
           <div>
             <h1>{view}</h1>
