@@ -292,4 +292,129 @@ describe('Entries', () => {
         });
     });
   });
+
+  describe('Get entries from the API', () => {
+    it('Gets multiple entries for a week', done => {
+      let start = new Date('2010-6-6').toLocaleDateString();
+      let end = new Date('2010-6-12').toLocaleDateString();
+
+      chai
+        .request(server)
+        .get('/api/entry?id=' + categoryId + '&start=' + start + '&end=' + end)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.exists(body.entries);
+          assert.equal(body.entries.length, 2);
+          done();
+        });
+    });
+
+    it('Should return error for no entries for the week', done => {
+      let start = new Date('2010-6-13').toLocaleDateString();
+      let end = new Date('2010-6-19').toLocaleDateString();
+
+      chai
+        .request(server)
+        .get('/api/entry?id=' + categoryId + '&start=' + start + '&end=' + end)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.exists(body.message, 'Error: Did not find any entries.');
+          done();
+        });
+    });
+
+    it('Should return error for no entries with an invalid category', done => {
+      let start = new Date('2010-6-6').toLocaleDateString();
+      let end = new Date('2010-6-12').toLocaleDateString();
+
+      chai
+        .request(server)
+        .get(
+          '/api/entry?id=5c4a4c7c30cbd465bcf5a600&start=' +
+            start +
+            '&end=' +
+            end
+        )
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.exists(body.message, 'Error: Did not find any entries.');
+          done();
+        });
+    });
+
+    it('Finds entries for log view', done => {
+      chai
+        .request(server)
+        .get('/api/entry/log?categoryId=' + categoryId + '&page=0')
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.equal(body.message, 'Entries found!');
+          done();
+        });
+    });
+
+    it('Should return error for no entries on second page', done => {
+      chai
+        .request(server)
+        .get('/api/entry/log?categoryId=' + categoryId + '&page=1')
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Could not find any entries');
+          done();
+        });
+    });
+
+    it('Should return error for no entries for wrong categoryId', done => {
+      chai
+        .request(server)
+        .get('/api/entry/log?categoryId=5c4a4c7c30cbd465bcf5a600&page=0')
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Could not find any entries');
+          done();
+        });
+    });
+  });
+
+  describe('Delete entries from the API', () => {
+    it('Deletes an entry', done => {
+      const body = {
+        id: entryId
+      };
+
+      chai
+        .request(server)
+        .delete('/api/entry/delete')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, true);
+          assert.equal(body.message, 'Entry ' + entryId + ' deleted!');
+          done();
+        });
+    });
+
+    it('Should return error for deleting a entry that does not exist', done => {
+      const body = {
+        id: '2'
+      };
+
+      chai
+        .request(server)
+        .delete('/api/entry/delete')
+        .send(body)
+        .end((err, res) => {
+          const { body } = res;
+          assert.equal(body.success, false);
+          assert.equal(body.message, 'Error: Server error.');
+          done();
+        });
+    });
+  });
 });
